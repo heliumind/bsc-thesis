@@ -1,0 +1,114 @@
+% PLEASE FILL IN THE PLACEHOLDERS <...>
+%
+% Bachelorarbeit von Henry He
+% Bachelor thesis of Henry He
+%
+% Title: Finite-Horizon AoI-based Scheduling with Gilbert-Elliot Channel Model
+%        
+%
+\documentclass[12pt,a4paper]{report}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% PACKAGES:
+
+% Define typearea
+% a) Use automatic:
+\usepackage[BCOR1cm]{typearea}
+% b) Or use fixed: 
+%\usepackage{geometry}
+%\geometry{left=1.5cm,textwidth=18.5cm,top=1.5cm,textheight=26.5cm}
+
+% Use German :
+%\usepackage[ngerman]{babel}
+% Use list of tabels, etc. in table of contents:
+\usepackage{tocbibind}
+% German paragraph skip
+\usepackage{parskip}
+% Encoder:
+\usepackage[utf8]{inputenc}
+% Use A4-paper efficiently:
+\usepackage{a4wide}
+% Index-generation
+\usepackage{makeidx}
+% Einbinden von URLs:
+\usepackage{url}
+% Include Graphic-files:
+\usepackage{graphicx}
+\graphicspath{ {./figures/} }
+% Include .eps-files (needed also for the LKN-logo):
+\usepackage[outdir=./figures/]{epstopdf}
+\epstopdfDeclareGraphicsRule{.pdf}{png}{.png}{convert #1 \OutputFile}
+\DeclareGraphicsExtensions{.png,.pdf}
+% Special \LaTex symbols (e.g. \BibTeX):
+\usepackage{doc}
+% Include doc++ generated tex-files:
+%\usepackage{docxx}
+% Include PDF links
+\usepackage[bookmarks=true]{hyperref}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% OTHER SETTINGS:
+
+% Pagestyle:
+\pagestyle{headings}
+
+% Avoid 'overhang':
+\sloppy
+
+% Choose language
+\newcommand{\setlang}[1]{\selectlanguage{#1}\nonfrenchspacing}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+% TITLE:
+\include{pages/cover}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% MAIN PART:
+% Independence and License statements
+\include{pages/statements}
+% German abstract:
+\include{pages/kurzfassung}
+% English abstract:
+\include{pages/abstract}
+% Table of contents:
+\tableofcontents  
+% Introduction (Einleitung):
+\include{chapters/01_introduction}
+
+% Text Body (Hauptteil)
+% Could have multiple chaper-files, e.g.:
+\include{chapters/02_background}
+\include{chapters/03_methodology}
+\include{chapters/04_evaluation}
+%  Conclusions (Zusammenfassung):
+\include{chapters/05_conclusion}
+\include{pages/formatting}
+
+% Appendix (Anhänge), could have multiple chaper-files:
+\appendix
+\include{pages/appendix}
+
+% Abbreviations (Abkürzungsverzeichnis):
+\include{pages/abbreviations}
+
+
+% References (Literaturverzeichnis):
+% a) Style (with numbers: use unsrt):
+\bibliographystyle{alpha}
+% b) The File:
+\bibliography{other/Bibliography}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}

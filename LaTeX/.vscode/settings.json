@@ -1,0 +1,5 @@
+{
+    "latex-workshop.latex.clean.subfolder.enabled": true,
+    "latex-workshop.latex.outDir": "%DIR%/out",
+    "latex-workshop.latex.autoBuild.run": "never",
+}

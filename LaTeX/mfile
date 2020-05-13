@@ -1,0 +1,10 @@
+all:
+	latex main.tex
+
+pdf:
+	latex main.tex
+	latex main.tex
+	dvipdf main.dvi
+
+clean:
+	rm *~
