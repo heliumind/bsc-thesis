@@ -1,0 +1,51 @@
+\definecolor{myred}{RGB}{220,43,25}
+\definecolor{mygreen}{RGB}{0,146,64}
+\definecolor{myblue}{RGB}{0,143,224}
+\definecolor{mygray}{gray}{0.80}
+\definecolor{mylightergray}{gray}{0.87}
+\definecolor{mylightestgray}{gray}{0.95}
+
+
+
+\usepackage{soul}
+
+\newif\ifcomments
+
+\commentstrue
+\newcommand{\commentBy}[3]{\textcolor{#1}{\{#2: #3\}}}
+
+\newcommand{\oa}[1]{\textcolor{myred}{#1}}
+
+\newcommand{\mg}[1]{\textcolor{mygreen}{#1}}
+\newcommand{\mgrm}[1]{\textcolor{mygreen}{\st{#1}}}
+\newcommand{\mgrep}[2]{\textcolor{mygreen}{(#1) can be replaced with: #2}}
+
+
+% Own Macros
+\newtheorem{mydef}{Definition}
+\newcommand{\setOfULResources}{\mathcal{R}^{\text{UL}}}
+\newcommand{\setOfDLResources}{\mathcal{R}^{\text{DL}}}
+\newcommand{\numOfULResources}{\mathsf{R^{\text{UL}}}}
+\newcommand{\numOfDLResources}{\mathsf{R^{\text{DL}}}}
+\newcommand{\ulResourceConsumption}{r_i^{\text{UL}}}
+\newcommand{\dlResourceConsumption}{r_i^{\text{DL}}}
+\newcommand{\setOfSamples}{\Xi_i}
+\newcommand{\txDelay}{d}
+\newcommand{\numLoops}{N}
+\newcommand{\bs}{\text{BS}}
+\newcommand{\avgAge}{\overline{\Delta}}
+\newcommand{\iae}{\Sigma_{e}}
+\newcommand{\samplingPeriod}{T^s_i}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\tr}{\mathsf{tr}}
+\newcommand{\ki}{k_i}
+\newcommand{\plant}{\mathcal{P}_i}
+\newcommand{\sensor}{\mathcal{S}_i}
+\newcommand{\controller}{\mathcal{C}_i}
+\newcommand{\estimator}{\mathcal{E}_i}
+\newcommand{\errornorm}{\E\left[\left\Vert e_i[k] \right\Vert^2 \right]}
+\newcommand{\statespace}{\bm{\mathcal{\bm{S}}}}
+\newcommand{\approxstatespace}{\bm{\mathcal{S}}_M}
+\newcommand{\minus}{\scalebox{0.75}[1.0]{$\,-\,$}}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}

@@ -1,0 +1,11 @@
+\begin{tikzpicture}[->,>=latex]
+  % Create nodes
+  \node[state] (G) {$G$};
+  \node[state] (B) [right = 2cm of G] {$B$};
+
+  % 
+  \path (G) edge [loop left, left] node {$1-f$} (G);
+  \path (B) edge [loop right, right] node {$1-r$} (B);
+  \path (G) edge [bend left, above] node {$f$} (B);
+  \path (B) edge [bend left, below] node {$r$} (G);
+\end{tikzpicture}

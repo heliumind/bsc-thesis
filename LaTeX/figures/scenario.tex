@@ -1,0 +1,51 @@
+\begin{tikzpicture}[>=latex, scale=0.9]
+  \node (plant) at (0.4,6.4) [draw,minimum width=2cm,minimum height=1.5cm, rounded corners=0.1cm, text width=3cm, align=center, fill=mylightestgray] {};
+  
+  \node (plant) at (0.2,6.2) [draw,minimum width=2cm,minimum height=1.5cm, rounded corners=0.1cm, text width=3cm, align=center, fill=mylightergray] {};
+  
+  % Plant
+  \node (plant) at (0,6) [draw,minimum width=2cm,minimum height=1.5cm, rounded corners=0.1cm, text width=3cm, align=center, fill=mygray] {\large{Plant $\mathcal{P}_i$}};
+  
+  
+  % Sensor 
+  \node (sensor) at (12.4,6.4) [draw,minimum width=2cm,minimum height=1.5cm, rounded corners=0.1cm, text width=3cm, align=center, fill=mylightestgray] {};
+  
+  \node (sensor) at (12.2,6.2) [draw,minimum width=2cm,minimum height=1.5cm, rounded corners=0.1cm, text width=3cm, align=center, fill=mylightergray] {};
+  
+  \node (sensor) at (12,6) [draw,minimum width=2cm,minimum height=1.5cm, rounded corners=0.1cm, text width=3cm, align=center, fill=lightgray] {\large{Sensor $\mathcal{S}_i$}};
+  
+  %Estimator
+  \node (estimator) at (6.4,2.4) [draw,minimum width=2cm,minimum height=1.5cm, rounded corners=0.1cm, text width=3cm, align=center, fill=mylightestgray] {\large{Estimator $\mathcal{E}_i$}};
+
+  \node (estimator) at (6.2,2.2) [draw,minimum width=2cm,minimum height=1.5cm, rounded corners=0.1cm, text width=3cm, align=center, fill=mylightergray] {\large{Estimator $\mathcal{E}_i$}};
+
+  \node (estimator) at (6,2) [draw,minimum width=2cm,minimum height=1.5cm, rounded corners=0.1cm, text width=3cm, align=center, fill=lightgray] {\large{Estimator $\mathcal{E}_i$}};
+
+
+  % Controller
+  \node (controller) at (0.4,2.4) [draw,minimum width=2cm,minimum height=1.5cm, rounded corners=0.1cm, text width=3cm, align=center, fill=mylightestgray] {};
+  
+  \node (controller) at (0.2,2.2) [draw,minimum width=2cm,minimum height=1.5cm, rounded corners=0.1cm, text width=3cm, align=center, fill=mylightergray] {};
+  
+  \node (controller) at (0,2) [draw,minimum width=2cm,minimum height=1.5cm, rounded corners=0.1cm, text width=3cm, align=center, fill=lightgray] {\large{Controller $\mathcal{C}_i$}};
+  
+  
+  % Network Cloud
+  \node[cloud, cloud puffs=11, cloud ignores aspect, minimum width=2cm, minimum height=1.5, text width=2.5cm, align=center, draw] (cloud) at (12, 2) {\large {Network \\} \small{with scheduler}};
+  
+  % C-to-P arrow
+  \draw[arrows=-triangle 45,black, ultra thick] (controller.north) -- node[pos=0.5, left] {\large $u_i[k_i]$} (plant.south);
+  
+  % P-to-S arrow
+  \draw[arrows=-triangle 45,black, ultra thick] (plant.east) -- node[pos=0.5, above] {\large $x_i[k_i]$} (sensor.west);
+  
+  % P-to-Cloud arrow
+  \draw[black, dashed, ultra thick] (sensor.south) -- node[] {} (cloud.north);
+  
+  % Cloud-to-E arrow
+  \draw[arrows=-triangle 45,black, dashed, ultra thick] (cloud.west) -- node[pos=0.5, above] {} (estimator.east);
+
+  % E-to-C arrow
+  \draw[arrows=-triangle 45,black, dashed, ultra thick] (estimator.west) -- node[pos=0.5, above] {\large $\hat{x}_i[k_i]$} (controller.east);
+  
+  \end{tikzpicture}

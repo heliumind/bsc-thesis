@@ -44,6 +44,10 @@
 \usepackage{doc}
 % Include doc++ generated tex-files:
 %\usepackage{docxx}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{array}
+\usepackage{tikz}
+\usetikzlibrary{automata, positioning, shapes, arrows}
 % Include PDF links
 \usepackage[bookmarks=true]{hyperref}
 
@@ -60,6 +64,8 @@
 % Choose language
 \newcommand{\setlang}[1]{\selectlanguage{#1}\nonfrenchspacing}
 
+% Import macros:
+\input{other/macros}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
@@ -71,9 +77,7 @@
 % MAIN PART:
 % Independence and License statements
 \include{pages/statements}
-% German abstract:
-\include{pages/kurzfassung}
-% English abstract:
+% Abstract:
 \include{pages/abstract}
 % Table of contents:
 \tableofcontents  
@@ -82,12 +86,13 @@
 
 % Text Body (Hauptteil)
 % Could have multiple chaper-files, e.g.:
-\include{chapters/02_background}
-\include{chapters/03_methodology}
-\include{chapters/04_evaluation}
+\include{chapters/02_survey}
+\include{chapters/03_background}
+\include{chapters/04_scenario}
+\include{chapters/05_scheduler}
+\include{chapters/06_evaluation}
 %  Conclusions (Zusammenfassung):
-\include{chapters/05_conclusion}
-\include{pages/formatting}
+\include{chapters/07_conclusion}
 
 % Appendix (Anhänge), could have multiple chaper-files:
 \appendix

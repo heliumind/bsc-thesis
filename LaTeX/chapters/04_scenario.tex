@@ -1,0 +1,29 @@
+\chapter{Scenario and Problem Statement}
+
+Suppose $N$ independent, linear time-invariant (LTI) control systems sharing a
+wirless communication network. Each individual subsytem $i$ consists of a plant
+$\plant$, a sensor $\sensor$, and a controller $\controller$ with an estimator
+$\estimator$. Each sensor $\sensor$ samples the plant periodically and transmits
+the latest state information to $\controller$. On the controller side,
+$\estimator$ estimates periodically the current plant state based on the latest
+received information. Estimated state is then used by $\controller$ to calculate
+the next control input. We assume each controller-plant pair to be co-located
+and hence connected through an ideal link while the sensor is operating remotely
+over the shared wirless channel as illustrated in Fig. \ref{fig:scenario}.
+
+\begin{figure}[h]
+  \centering
+  \input{figures/scenario}
+  \caption{Considered scenario with $N$ heterogenous LTI networked control systems. Solid lines indicate ideal controller-to-plant and plant-to-sensor links. Sensor-to-contoller link is closed over a shared wireless channel. Medium access is granted centrally by a scheduler. Note that $k_i$ refers to the sampling period a sub-system $i$ is.}
+  \label{fig:scenario}
+\end{figure}
+
+
+\section{Network Model}
+Time is divided into slots which is also the smallest time unit in our scenario.
+We use $t \in \mathbb{N}$ All transmissions are managed by a centralized entity
+called \textit{scheduler}.
+
+\section{Age-of-Information Model}
+
+\section{Control Model}

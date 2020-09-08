@@ -58,7 +58,8 @@ varying conditions in the network prevent the calculation of infinite horizon
 optimal scheduling policies. Nevertheless, by applying stochastic optimization
 and dynammic programming first works have proposed an online, centralized
 scheduling policy that is age-penalty optimal for a finite horizon $H$. However,
-this solution do not consider realistic channel behaviour as found in the
+this solution assumes a Bernoulli loss process, while in reality packet losses
+tend to be correlated. One simple model for correlated losses is the
 Gilbert-Elliot model. We aim to extend the state-of-the-art by combining our
 findings of the Gilbert-Elliot channel model with the said AoI-based Finite
 Horizon scheduler.

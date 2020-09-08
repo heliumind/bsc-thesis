@@ -1,0 +1,158 @@
+\section{Gilbert-Elliot Model}
+
+In a wireless communication environment, channel errors are bursty, location
+dependent, and mobility dependent. These are due to radio propagation
+impairments such as shadowing and multipath fading, as well as interference from
+neighboring systems and users. In addition, one must take into account that
+users of a wireless network, do not perceive the same channel quality at all
+times, where channel quality is considered high when its bit error rate (BER) is
+low. Thus, there is one wireless channel (link) between each pair of spatially
+distributed nodes (users). 
+
+\begin{figure}[h]
+  \centering
+  \input{figures/ge_fsm.tex} 
+  \caption{The Markov chain for the Gilbert-Elliot model}
+  \label{fig:GE_FSM}
+\end{figure}
+
+In the literature, the time-varying quality of a bursty error wireless channel
+is commonly modeled using the \textit{Gilbert–Elliot} model (GE)
+\cite{gilbert1960capacity}
+\cite{elliott1963estimates}. It is a widely used stochastic model for describing
+bit error processes in transmisson channels, where errors are correlated. There
+are several parameterizations of this model, but we will use the specific Markov
+chain shown in Fig. \ref{fig:GE_FSM}. This model is a two-state homogenous
+Markov chain where each of the two states corresponds to high or low channel
+quality and is called good state $G$ or bad state $B$, respectively. Each of them may
+generate errors as independent events at a state dependent error rate $p_G$ in
+the good and $p_B$ in the bad state. As shown in \cite{hasslinger2008gilbert},
+to apply the model in data loss processes, we consider the packet reception
+process as a sequence of bits: 0 stands for a successful arrival
+of a packet whereas 1 denotes a lost or corrupted packet.
+
+Let $q_t$ denote the state at time $t$, the GE model is defined by the
+transition matrix $\Pi$
+
+\begin{equation*}
+  \Pi = \left (\begin{array}{cc} 1-f & f \\ r & 1-r \end{array} \right) 
+\end{equation*}
+\begin{align*}
+  f &= P(q_t = B \mid q_{t-1} = G) \qquad \textrm{failure rate} \\
+  r &= P(q_t = G \mid q_{t-1} = B) \qquad \textrm{recovery rate}
+\end{align*}
+
+where $f\in(0,1)$ and $r\in(0,1)$ are the transition probabilty between states,
+respectively. With these definitions, the stationary state probabilties of the
+good state $\pi_G$ and $\pi_B$ exist and can be defined as follows:
+
+\begin{equation}
+  \pi_G = \frac{r}{f+r} \quad \textrm{and} \quad \pi_B = \frac{f}{f+r}
+\end{equation}
+
+The stationary state probabilties can be interpreted as the average percentage
+of time, in which the channel is in good or bad state. Thus, the \textit{average
+error probabilty} is obtained as:
+
+\begin{equation}
+  p_E = \pi_G p_G + \pi_B p_B
+  \label{eq:avgLoss}
+\end{equation}
+
+Another important characteristic defined by the GE model is the mean sojourn
+time, i.e., the average duration that the wirless channel stays in a state. In
+common NCS scenarios, packet transmissions occur in discrete time slots. Hence,
+the channel can only change its state in these time slots and the amount of time
+spent in a state is a geometrically distributed random variable $\tau_G$ and
+$\tau_B$. Given the state transition probabilties, the mean sojourn times are:
+
+\begin{equation}
+  T_G = \E[\tau_G] = \frac{1}{f} \quad \textrm{and} \quad T_B = \E[\tau_B] = \frac{1}{r}
+\end{equation}
+
+Table \ref{tab:sojournTime} summarizes sojourn times measurements performed
+under different GE parameterizations. The measurements resembles the expected
+statistical properties of a geometric distribution and confirms our mapping of
+state transition probabilties to their corresponding mean sojourn time, which we
+will term \textit{average coherence time} throughout the rest of the thesis.
+
+\begin{table}[h]
+  \begin{center}
+  \begin{tabular}{|p{3.5cm}|c|c|c|c|}
+  \hline 
+  & \multicolumn{2}{|c|}{\textbf{Time in Good}} &
+  \multicolumn{2}{|c|}{\textbf{Time in Bad}} \\
+  \hline
+  \textbf{Failure rate} $f$ / \textbf{Recovery rate} $r$ & \textbf{mean} & \textbf{std} & \textbf{mean}
+  & \textbf{std}\\
+  \hline \hline
+  0.3 & 3.34 & 2.74 & 3.32 & 2.77 \\
+  \hline 
+  0.1 & 10.0 & 9.56 & 10.0 & 9.29 \\
+  \hline 
+  0.03 & 33.4 & 32.6 & 34.1 & 34.1 \\
+  \hline 
+  0.01 & 94.3 & 89.5 & 98.1 & 99.6 \\
+  \hline 
+  \end{tabular}
+  \caption{Measurment of sojourn times for different transition probabilties. Note that the state transition
+  probabilties are chosen symmetrically for this measurement, i.e. $f=r$}
+  \label{tab:sojournTime}
+  \end{center}
+  \end{table}
+
+
+\section{Dynamic Programming Algorithm}
+
+Dynamic programming (DP) is both a mathematical optimization method and a
+computer programming method. The method was developed by Richard Bellman in the
+1950s and has found applications in numerous fields, from aerospace engineering
+to economics. In the context of this thesis, DP is applied in solving a wireless
+resource scheduling problem. We will first describe the principles of the DP
+algorithm with a general decision problem. To this end, we formulate a broadly
+applicable model of optimal control of a dynamic system over a finite number of
+stages (a finite horizon). Detailed application of DP to our scheduling problem
+will be given in chapter. 
+
+As such, it resembles a general problem of decision under stochastic
+uncertainty, which has two principal features. An underlying discrete-time
+dynamic system and a \textit{cost function}. Solving the decision problem
+entails in minimizing this cost function, subject to the system's dynamics.
+Given a discrete-time dynamic system of the form
+
+\begin{equation*}
+  x_{k+1} = f_k(x_k, u_k, w_k), \quad k = 0,1,\dots,N-1,
+\end{equation*}
+
+where
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{rl}
+    $k \in$ & indexes discrete time, \\
+    $x_k \in$  & is the system's state and summarizes past information, \\
+    $u_k \in$ & is the control or decision variable to be selected at time $k$, \\
+    $w_k \in$ & is a random paramter, also called distrubance or noise, \\
+    $N$ & is the horizon or number of times control is applied, 
+  \end{tabular}
+\end{table}
+
+and $f_k$ is a function that describes the system's dynamics. The dynamic system expresses the evolution of the system's state, under the
+influence of decisions made at discrete instances of time. 
+
+The cost function is additive over time in the sense that the cost incurred at
+time $k$, denoted by $g_k(x_k, u_k, w_k)$, accumulates over time. The total cost
+is
+
+\begin{equation*}
+  g_N(x_N) + \sum\limits_{k=0}^{N-1}{g_k(x_k, u_k, w_k)},
+\end{equation*}
+
+where $g_N(x_N)$ is the terminal cost incurred at the end of the process.
+However, since randomness introduced is by $w_k$, the cost is generally a
+random variable and cannot be easily optimized. Therefore the optimal control
+problem is formulated as an minimization of the \textit{expected cost}
+
+\begin{equation*}
+  J
+\end{equation*}
