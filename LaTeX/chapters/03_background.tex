@@ -1,4 +1,4 @@
-\section{Gilbert-Elliot Model}
+\section{Gilbert-Elliot Model} \label{sec:GE}
 
 In a wireless communication environment, channel errors are bursty, location
 dependent, and mobility dependent. These are due to radio propagation
@@ -21,21 +21,22 @@ is commonly modeled using the \textit{Gilbert–Elliot} model (GE)
 \cite{gilbert1960capacity}
 \cite{elliott1963estimates}. It is a widely used stochastic model for describing
 bit error processes in transmisson channels, where errors are correlated. There
-are several parameterizations of this model, but we will use the specific Markov
-chain shown in Fig. \ref{fig:GE_FSM}. This model is a two-state homogenous
-Markov chain where each of the two states corresponds to high or low channel
-quality and is called good state $G$ or bad state $B$, respectively. Each of them may
-generate errors as independent events at a state dependent error rate $p_G$ in
-the good and $p_B$ in the bad state. As shown in \cite{hasslinger2008gilbert},
-to apply the model in data loss processes, we consider the packet reception
-process as a sequence of bits: 0 stands for a successful arrival
-of a packet whereas 1 denotes a lost or corrupted packet.
+are several parameterizations of this model, but we will be using the specific
+Markov chain shown in Fig. \ref{fig:GE_FSM}. This model is a two-state
+homogenous Markov chain where each of the two states corresponds to high or low
+channel quality and is called good state $G$ or bad state $B$, respectively.
+Each of them may generate errors as independent events at a state dependent
+error rate $p_G$ in the good and $p_B$ in the bad state. As shown in
+\cite{hasslinger2008gilbert}, in order to apply the model in data loss
+processes, we consider the packet reception process as a sequence of bits: 0
+stands for a successful arrival of a packet whereas 1 denotes a lost or
+corrupted packet.
 
 Let $q_t$ denote the state at time $t$, the GE model is defined by the
-transition matrix $\Pi$
+transition matrix $\mathbf{T}$
 
 \begin{equation*}
-  \Pi = \left (\begin{array}{cc} 1-f & f \\ r & 1-r \end{array} \right) 
+  \mathbf{T} = \left (\begin{array}{cc} 1-f & f \\ r & 1-r \end{array} \right) 
 \end{equation*}
 \begin{align*}
   f &= P(q_t = B \mid q_{t-1} = G) \qquad \textrm{failure rate} \\
@@ -44,7 +45,8 @@ transition matrix $\Pi$
 
 where $f\in(0,1)$ and $r\in(0,1)$ are the transition probabilty between states,
 respectively. With these definitions, the stationary state probabilties of the
-good state $\pi_G$ and $\pi_B$ exist and can be defined as follows:
+good state $\pi_G$ and the bad state $\pi_B$ exist and can be defined as
+follows:
 
 \begin{equation}
   \pi_G = \frac{r}{f+r} \quad \textrm{and} \quad \pi_B = \frac{f}{f+r}
@@ -59,6 +61,7 @@ error probabilty} is obtained as:
   \label{eq:avgLoss}
 \end{equation}
 
+\subsection*{Average Coherence Time}
 Another important characteristic defined by the GE model is the mean sojourn
 time, i.e., the average duration that the wirless channel stays in a state. In
 common NCS scenarios, packet transmissions occur in discrete time slots. Hence,
@@ -73,8 +76,9 @@ $\tau_B$. Given the state transition probabilties, the mean sojourn times are:
 Table \ref{tab:sojournTime} summarizes sojourn times measurements performed
 under different GE parameterizations. The measurements resembles the expected
 statistical properties of a geometric distribution and confirms our mapping of
-state transition probabilties to their corresponding mean sojourn time, which we
-will term \textit{average coherence time} throughout the rest of the thesis.
+state transition probabilties to their corresponding mean sojourn time.
+Throughout the rest of the thesis, we will refer $T_G$ and $T_B$ as
+\textit{average coherence times}.
 
 \begin{table}[h]
   \begin{center}
@@ -95,33 +99,37 @@ will term \textit{average coherence time} throughout the rest of the thesis.
   0.01 & 94.3 & 89.5 & 98.1 & 99.6 \\
   \hline 
   \end{tabular}
-  \caption{Measurment of sojourn times for different transition probabilties. Note that the state transition
+  \caption[Measurement of average coherence time]{Measurment of average coherence times for different transition probabilties. Note that the state transition
   probabilties are chosen symmetrically for this measurement, i.e. $f=r$}
   \label{tab:sojournTime}
   \end{center}
   \end{table}
 
 
-\section{Dynamic Programming Algorithm}
+\section{Dynamic Programming} \label{sec:DP}
 
 Dynamic programming (DP) is both a mathematical optimization method and a
 computer programming method. The method was developed by Richard Bellman in the
 1950s and has found applications in numerous fields, from aerospace engineering
-to economics. In the context of this thesis, DP is applied in solving a wireless
-resource scheduling problem. We will first describe the principles of the DP
-algorithm with a general decision problem. To this end, we formulate a broadly
-applicable model of optimal control of a dynamic system over a finite number of
-stages (a finite horizon). Detailed application of DP to our scheduling problem
-will be given in chapter. 
+to economics. The fundamental idea behind DP is to break down a complicated
+problem into simpler subproblems, obtaining the solution by iteratively
+combining solutions of small subproblems in a bottom-up-approach. \\ In the
+context of this thesis, DP is applied in solving a wireless resource scheduling
+problem. We will first describe the principles of the DP algorithm with a
+general decision problem under stochastic uncertainty. To this end, we formulate
+a broadly applicable model of optimal control of a dynamic system over a finite
+number of stages $H$ (a finite horizon). Detailed application of DP to solve our
+scheduling problem will be given in chapter \ref{sec:problem}
 
-As such, it resembles a general problem of decision under stochastic
-uncertainty, which has two principal features. An underlying discrete-time
-dynamic system and a \textit{cost function}. Solving the decision problem
-entails in minimizing this cost function, subject to the system's dynamics.
-Given a discrete-time dynamic system of the form
+\subsection*{Basic Problem of Decision}
+A general problem of decision has two principal features. An underlying
+discrete-time dynamic system and an \textit{additive} cost function $J$ which is
+to be minimized. The dynamic system expresses the evolution of the system's
+state, under the influence of decisions made at discrete instances of time. The
+system has the form of
 
 \begin{equation*}
-  x_{k+1} = f_k(x_k, u_k, w_k), \quad k = 0,1,\dots,N-1,
+  x_{k+1} = f_k(x_k, u_k, w_k), \quad k = 0,1,\dots,H-1,
 \end{equation*}
 
 where
@@ -129,30 +137,124 @@ where
 \begin{table}[h]
   \centering
   \begin{tabular}{rl}
-    $k \in$ & indexes discrete time, \\
-    $x_k \in$  & is the system's state and summarizes past information, \\
-    $u_k \in$ & is the control or decision variable to be selected at time $k$, \\
-    $w_k \in$ & is a random paramter, also called distrubance or noise, \\
-    $N$ & is the horizon or number of times control is applied, 
+    $k$ & indexes discrete time, \\
+    $x_k \in \mathbb{S}_k$  & is the system's state and summarizes past information, \\
+    $u_k \in \mathbb{C}_k$ & is the control or decision variable to be selected at time $k$, \\
+    $w_k \in \mathbb{D}_k$ & is a random paramter, also called distrubance or noise, \\
+    $H \in \mathbb{Z}^+$ & is the horizon or number of times control is applied, 
   \end{tabular}
 \end{table}
 
-and $f_k$ is a function that describes the system's dynamics. The dynamic system expresses the evolution of the system's state, under the
-influence of decisions made at discrete instances of time. 
+and $f_k$ is a function that describes the system's dynamics. The control $u_k$
+is constrained to take values in a given nonempty subset $\mathbb{U}_k(x_k)
+\subset \mathbb{C}_k$, which depends on the current state $x_k$, i.e., $u_k \in
+\mathbb{U}_k(x_k), \forall x_k \in \mathbb{S}_k$ and $k$. The random disturbance
+$w_k$ is characterized by an independent probability distribution $P_k(\cdot\mid
+x_k,u_k)$ that may depend explicity on $x_k$ and $u_k$.
 
-The cost function is additive over time in the sense that the cost incurred at
-time $k$, denoted by $g_k(x_k, u_k, w_k)$, accumulates over time. The total cost
-is
-
-\begin{equation*}
-  g_N(x_N) + \sum\limits_{k=0}^{N-1}{g_k(x_k, u_k, w_k)},
-\end{equation*}
-
-where $g_N(x_N)$ is the terminal cost incurred at the end of the process.
-However, since randomness introduced is by $w_k$, the cost is generally a
-random variable and cannot be easily optimized. Therefore the optimal control
-problem is formulated as an minimization of the \textit{expected cost}
+The cost function is \textit{additive} over time in the sense that the cost
+acquired at time $k$, denoted by $g_k(x_k, u_k, w_k)$, accumulates over time.
+Meaning, the total cost is defined as:
 
 \begin{equation*}
-  J
+  g_N(x_H) + \sum\limits_{k=0}^{H-1}{g_k(x_k, u_k, w_k)},
 \end{equation*}
+
+where $g_N(x_H)$ is the terminal cost incurred at the end of the process.
+However, since randomness is introduced by $w_k$, the cost is a random variable,
+making this a stochastic optimization problem. Therefore, we form the
+expectation of the total cost and minimize the \textit{expected cost}
+
+\begin{equation*}
+  \E\left[g_H(x_H) + \sum\limits_{k=0}^{H-1}{g_k(x_k, u_k, w_k)}\right],
+\end{equation*}
+
+where the expectation is taken over the random variables $w_k$ and $x_k$.
+
+Consider the class of policies (also called control laws) that consists of a
+sequence of functions 
+
+\begin{equation}
+  \pi = \left\{\mu_o,\dots,\mu_H-1\right\},
+\end{equation}
+
+where $\mu_k$ maps states $x_k$ into control inputs $u_k = \mu_k(x_k)$ and is
+such that $\mu_k(x_k) \in \mathbb{U}_k, \forall x_k \in \mathbb{S}_k$. Such
+policies will be called \textit{admissible}. Given an initial state $x_0$ and an
+admissible policy $\pi = \left\{\mu_o,\dots,\mu_H-1\right\}$, the expected cost
+of starting at $x_0$ is
+
+\begin{equation}
+  J_\pi(x_0) = \E_\pi\left[g_H(x_H) + \sum\limits_{k=0}^{H-1}{g_k(x_k, \mu_k(x_k), w_k)}\right]
+\end{equation}
+
+Since, the system can actively soley be manipulated by means of control inputs
+or decision variables $u_k$, the goal is to find a sequence of $u_k$, such that
+the total expected cost is minimal. In other words, we are interested in an
+optimal policy $\pi^*$, such that for $J_\pi(x_0)$ the following counts:
+
+\begin{equation}
+  J_\pi^*(x_0) = \min_{\pi\in\Pi}J_\pi(x_0) = J^*(x_0), \label{eq:HStageProblem}
+\end{equation}
+
+where $\Pi$ is the set of all admissible policies. Throughout the remaining
+chapters, we will refer to the minimization problem in Eq.
+(\ref{eq:HStageProblem}) as the \textit{H-stage problem} and drop the subscript
+$\pi$ for brevity.
+
+\subsection*{Principle of Optimality}
+DP rests on the \textit{principle of optimality}, which intuitively states that
+every optimal policy consists only of optimal sub policies. Applying this
+principle to our above formulated problem, yields: 
+
+\begin{center}
+\fbox{\parbox{0.9\textwidth}{
+  Let $\pi^* = \left\{\mu_0^*,\mu_1^*,\dots,\mu_{H-1}^*\right\}$ be an optimal 
+  policy for the basic decision problem. Consider the subproblem whereby we are 
+  at $x_i$ at time $i$ and wish to minimize the \textit{cost-to-go} from the 
+  time $i$ to time $H$, i.e., 
+  \begin{equation*}
+    \E\left[g_H(x_H) + \sum\limits_{k=i}^{H-1}{g_k(x_k, u_k,w_k)}\right]. 
+  \end{equation*}
+  Then the policy $\left\{\mu_i^*,\mu_{i+1}^*,\dots,\mu_{H+1}^*\right\}$ is
+  optimal for this subproblem.
+  }
+}
+\end{center}
+
+For an intuitive analogy, suppose that the fastest route from Munich to Mannheim
+passes through Stuttgart. The principle of optimality translates to the obvious
+fact that the Stuttgart to Mannheim portion of the route is also the fastest
+route for a trip that starts from Stuttgart and ends in Mannheim.
+
+The principle of optimality suggests that an optimal policy can be constructed
+in a piece-by-peace fashion. First construct an optimal policy for the ``tail
+subproblem'' involving the last stage, then extend the optimal policy to the
+``tail subproblem'' involving the last two stages, and continuing iteratively
+until an optimal policy for the entire problem is constructed. The DP algorithm
+is based on this idea:
+
+\subsection*{The DP Algorithm} \label{sec:DPalgorithm}
+
+\textit{Adapted from \cite{bertsekas1995dynamic}}. For any intial state $x_0$,
+the optimal cost $J^*(x_0)$ of the basic decision problem is equal to
+$J_0(x_0)$, given by the last step of the following algorithm: 
+
+
+\begin{center}
+  \fbox{
+  \parbox{0.9\textwidth}{
+    Iterate backwards from $k=N-1$ to 0 
+    \begin{gather}
+      J_H(x_H) = g_H(x_H), \\
+      J_k(x_k) = \min_{u_k\in\mathbb{U}_k(x_k)} \E_{w_k}\left[g_k(x_k,u_k,w_k) + J_{k+1}(f_k(x_k,u_k,w_k)) \right], \label{eq:DPalgorithm}
+    \end{gather}
+  
+    where the expectation is taken with respect to the probabilty distribution of
+    $w_k$, dependent on $x_k$ and $u_k$. Further, if $u_k^* = \mu_k^*(x_k)$
+    minimizes the right side of Eq. (\ref{eq:DPalgorithm}) for each $x_k$ and $k$,
+    the policy $\pi^* = \left\{\mu_0^*,\dots,\mu_{H-1}^*\right\}$ is optimal.
+  }}
+\end{center}
+
+The proof can be found in \cite{bertsekas1995dynamic} p.23
