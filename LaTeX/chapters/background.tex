@@ -2,8 +2,8 @@
 
 In a wireless communication environment, channel errors are bursty, location
 dependent, and mobility dependent. These are due to radio propagation
-impairments such as shadowing and multipath fading, as well as interference from
-neighboring systems and users. In addition, one must take into account that
+impairments such as shadowing and multi-path fading, as well as interference
+from neighboring systems and users. In addition, one must take into account that
 users of a wireless network, do not perceive the same channel quality at all
 times, where channel quality is considered high when its bit error rate (BER) is
 low. Thus, there is one wireless channel (link) between each pair of spatially
@@ -18,15 +18,14 @@ distributed nodes (users).
 
 In the literature, the time-varying quality of a bursty error wireless channel
 is commonly modeled using the \textit{Gilbert–Elliot} model (GE)
-\cite{gilbert1960capacity}
-\cite{elliott1963estimates}. It is a widely used stochastic model for describing
-bit error processes in transmisson channels, where errors are correlated. There
-are several parameterizations of this model, but we will be using the specific
-Markov chain shown in Fig. \ref{fig:GE_FSM}. This model is a two-state
-homogenous Markov chain where each of the two states corresponds to high or low
-channel quality and is called good state $G$ or bad state $B$, respectively.
-Each of them may generate errors as independent events at a state dependent
-error rate $p_G$ in the good and $p_B$ in the bad state. As shown in
+\cite{gilbert1960capacity, elliott1963estimates}. It is a widely used stochastic
+model for describing bit error processes in transmission channels, where errors
+are correlated. There exits several parameterization of this model, but we will
+be using the specific Markov chain shown in Fig. \ref{fig:GE_FSM}. This model is
+a two-state homogenous Markov chain where each of the two states corresponds to
+high or low channel quality and is called good state $G$ or bad state $B$,
+respectively. Each of them may generate errors as independent events at a state
+dependent error rate $p_G$ in the good and $p_B$ in the bad state. As shown in
 \cite{hasslinger2008gilbert}, in order to apply the model in data loss
 processes, we consider the packet reception process as a sequence of bits: 0
 stands for a successful arrival of a packet whereas 1 denotes a lost or
@@ -43,8 +42,8 @@ transition matrix $\mathbf{T}$
   r &= P(q_t = G \mid q_{t-1} = B) \qquad \textrm{recovery rate}
 \end{align*}
 
-where $f\in(0,1)$ and $r\in(0,1)$ are the transition probabilty between states,
-respectively. With these definitions, the stationary state probabilties of the
+where $f\in(0,1)$ and $r\in(0,1)$ are the transition probability between states,
+respectively. With these definitions, the stationary state probabilities of the
 good state $\pi_G$ and the bad state $\pi_B$ exist and can be defined as
 follows:
 
@@ -52,9 +51,9 @@ follows:
   \pi_G = \frac{r}{f+r} \quad \textrm{and} \quad \pi_B = \frac{f}{f+r}
 \end{equation}
 
-The stationary state probabilties can be interpreted as the average percentage
+The stationary state probabilities can be interpreted as the average percentage
 of time, in which the channel is in good or bad state. Thus, the \textit{average
-error probabilty} is obtained as:
+error probability} is obtained as:
 
 \begin{equation}
   p_E = \pi_G p_G + \pi_B p_B
@@ -63,20 +62,20 @@ error probabilty} is obtained as:
 
 \subsection*{Average Coherence Time}
 Another important characteristic defined by the GE model is the mean sojourn
-time, i.e., the average duration that the wirless channel stays in a state. In
+time, i.e., the average duration that the wireless channel stays in a state. In
 common NCS scenarios, packet transmissions occur in discrete time slots. Hence,
 the channel can only change its state in these time slots and the amount of time
 spent in a state is a geometrically distributed random variable $\tau_G$ and
-$\tau_B$. Given the state transition probabilties, the mean sojourn times are:
+$\tau_B$. Given the state transition probabilities, the mean sojourn times are:
 
 \begin{equation}
   T_G = \E[\tau_G] = \frac{1}{f} \quad \textrm{and} \quad T_B = \E[\tau_B] = \frac{1}{r}
 \end{equation}
 
 Table \ref{tab:sojournTime} summarizes sojourn times measurements performed
-under different GE parameterizations. The measurements resembles the expected
+under different GE parameterization. The measurements resembles the expected
 statistical properties of a geometric distribution and confirms our mapping of
-state transition probabilties to their corresponding mean sojourn time.
+state transition probabilities to their corresponding mean sojourn time.
 Throughout the rest of the thesis, we will refer $T_G$ and $T_B$ as
 \textit{average coherence times}.
 
@@ -99,8 +98,10 @@ Throughout the rest of the thesis, we will refer $T_G$ and $T_B$ as
   0.01 & 94.3 & 89.5 & 98.1 & 99.6 \\
   \hline 
   \end{tabular}
-  \caption[Measurement of average coherence time]{Measurment of average coherence times for different transition probabilties. Note that the state transition
-  probabilties are chosen symmetrically for this measurement, i.e. $f=r$}
+  \caption[Measurement of average coherence time]{Measurement of average
+  coherence times for different transition probabilities. Note that the state
+  transition probabilities are chosen symmetrically for this measurement, i.e.
+  $f=r$}
   \label{tab:sojournTime}
   \end{center}
   \end{table}
@@ -140,7 +141,7 @@ where
     $k$ & indexes discrete time, \\
     $x_k \in \mathbb{S}_k$  & is the system's state and summarizes past information, \\
     $u_k \in \mathbb{C}_k$ & is the control or decision variable to be selected at time $k$, \\
-    $w_k \in \mathbb{D}_k$ & is a random paramter, also called distrubance or noise, \\
+    $w_k \in \mathbb{D}_k$ & is a random parameter, also called disturbance or noise, \\
     $H \in \mathbb{Z}^+$ & is the horizon or number of times control is applied, 
   \end{tabular}
 \end{table}
@@ -188,7 +189,7 @@ of starting at $x_0$ is
   J_\pi(x_0) = \E_\pi\left[g_H(x_H) + \sum\limits_{k=0}^{H-1}{g_k(x_k, \mu_k(x_k), w_k)}\right]
 \end{equation}
 
-Since, the system can actively soley be manipulated by means of control inputs
+Since the system can actively solely be manipulated by means of control inputs
 or decision variables $u_k$, the goal is to find a sequence of $u_k$, such that
 the total expected cost is minimal. In other words, we are interested in an
 optimal policy $\pi^*$, such that for $J_\pi(x_0)$ the following counts:
@@ -236,9 +237,9 @@ is based on this idea:
 
 \subsection*{The DP Algorithm} \label{sec:DPalgorithm}
 
-\textit{Adapted from \cite{bertsekas1995dynamic}}. For any intial state $x_0$,
-the optimal cost $J^*(x_0)$ of the basic decision problem is equal to
-$J_0(x_0)$, given by the last step of the following algorithm: 
+Adapted from \cite{bertsekas1995dynamic}. For any initial state $x_0$, the
+optimal cost $J^*(x_0)$ of the basic decision problem is equal to $J_0(x_0)$,
+given by the last step of the following algorithm: 
 
 
 \begin{center}
@@ -250,11 +251,9 @@ $J_0(x_0)$, given by the last step of the following algorithm:
       J_k(x_k) = \min_{u_k\in\mathbb{U}_k(x_k)} \E_{w_k}\left[g_k(x_k,u_k,w_k) + J_{k+1}(f_k(x_k,u_k,w_k)) \right], \label{eq:DPalgorithm}
     \end{gather}
   
-    where the expectation is taken with respect to the probabilty distribution of
-    $w_k$, dependent on $x_k$ and $u_k$. Further, if $u_k^* = \mu_k^*(x_k)$
-    minimizes the right side of Eq. (\ref{eq:DPalgorithm}) for each $x_k$ and $k$,
-    the policy $\pi^* = \left\{\mu_0^*,\dots,\mu_{H-1}^*\right\}$ is optimal.
-  }}
+    where the expectation is taken with respect to the probability distribution
+    of $w_k$, dependent on $x_k$ and $u_k$. Further, if $u_k^* = \mu_k^*(x_k)$
+    minimizes the right side of Eq. (\ref{eq:DPalgorithm}) for each $x_k$ and
+    $k$, the policy $\pi^* = \left\{\mu_0^*,\dots,\mu_{H-1}^*\right\}$ is
+    optimal.}}
 \end{center}
-
-The proof can be found in \cite{bertsekas1995dynamic} p.23
