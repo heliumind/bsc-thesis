@@ -60,18 +60,17 @@ calculate control system metrics.
 
 \section*{Contributions and Outline}
 In this work, we aim to develop a scheduling policy addressing a centralized
-wireless resource scheduling problem for NCS with time varying Gilbert-Elliot
-channel. To achieve this, we utilize an AoI-based, control dependent age-penalty
-and form scheduling decisions by means of expected cost minimization. Furter, we
-consider the feedback control loops sharing a wireless communication link with
-time-varying packet loss probabilities. Time varying conditions in the network
-prevent the calculation of infinite horizon optimal scheduling policies.
-Nevertheless, by applying stochastic optimization and dynamic programming
-\cite{ayan2020aoi} have proposed an online, centralized scheduling policy that
-is age-penalty optimal for a finite horizon $H$. However, this solution assumes
-a Bernoulli, i.e., identically and independently distributed (i.i.d.), loss
-process for packet transmission, while in reality packet losses tend to be
-correlated. One simple model for correlated losses is the Gilbert-Elliot model.
-We aim to extend the state-of-the-art by combining our findings of the
-Gilbert-Elliot channel model with the said AoI-based Finite Horizon scheduler.
+wireless resource scheduling problem for NCS. We consider multiple heterogenous
+feedback control loops sharing a wireless link with time-varying channel
+conditions according to the Gilbert-Elliot model. The deviation of the real
+state from the estimated state on the receiver, i.e. controller, is taken as
+performance metric. To provide optimal NCS behavior, we utilize an AoI-based,
+control dependent age-penalty and form scheduling decisions by means of expected
+cost minimization. For a similar scenario, \cite{ayan2020aoi} has proposed an
+online, centralized scheduling policy that is age-penalty optimal for a finite
+horizon $H$. However, this solution assumes a Bernoulli, loss process for packet
+transmission, while in reality packet losses tend to be correlated. One simple
+model for correlated losses is the Gilbert-Elliot model. We aim to extend the
+state-of-the-art by combining our findings of the Gilbert-Elliot channel model
+with the said AoI-based Finite Horizon scheduler.
 

@@ -8,22 +8,22 @@
 % contribution of the thesis is introduced in detail. 
 
 In this chapter, we first present related work on scheduling in NCS scenarios in
-Section \ref{sec:survey}. Afterwards, we give a short introduction to the
-Gilbert-Elliot channel model in Section. \ref{sec:GE} and introduce the Dynamic
-Programming algorithm for stochastic optimization in Section. \ref{sec:DP}.
+Section~(\ref{sec:survey}). Afterwards, we give a short introduction to the
+Gilbert-Elliot channel model in Section.~(\ref{sec:GE}) and introduce the Dynamic
+Programming algorithm for stochastic optimization in Section.~(\ref{sec:DP}).
 
 \section{Related Work} \label{sec:survey}
 
-Scheduling for NCSs has initially gained research interest from the control
-community, where it has been studied as time-triggered and event-triggered
-control problems \cite{molin2012optimality, molin2014price}. Both papers
-consider optimizations for the steady-state of an NCS with respect to resource
-constraints. While the proposed methods ensure optimal steady-state behavior,
-the network is often assumed control-agnostic and is abstracted. However, 
-the time-varying nature of wireless channels, the trade-offs among different
-control-loops and the coexistence of heterogenous traffic types imply that
-incorporating control metrics in network design can achieve performance benefits
-on the whole system. \\
+% Scheduling for NCSs has initially gained research interest from the control
+% community, where it has been studied as time-triggered and event-triggered
+% control problems \cite{molin2012optimality, molin2014price}. Both papers
+% consider optimizations for the steady-state of an NCS with respect to resource
+% constraints. While the proposed methods ensure optimal steady-state behavior,
+% the network is often assumed control-agnostic and is abstracted. However, 
+% the time-varying nature of wireless channels, the trade-offs among different
+% control-loops and the coexistence of heterogenous traffic types imply that
+% incorporating control metrics in network design can achieve performance benefits
+% on the whole system. \\
 In communication research a trend towards cross-layer network design has been
 shown to be beneficial in NCS settings \cite{park2017wireless}. Error reports
 were the first cross-layer metric considered in a centralized scheduling problem
@@ -57,24 +57,29 @@ analytically that the minimum AoI is achieved by updating the user with the
 highest AoI. While AoI itself cannot be directly mapped into closed loop control
 applications as AoI by design evolves linear in time and uniform for all
 applications. Therefore, \cite{kosta2017age} proposed a non-linear aging concept
-called \textit{value-of-information} (VoI) which take individual application
+called \textit{value-of-information} (VoI) which takes individual application
 dynamics into account. \\
 AoI based application-dependent age penalties, has first been adopted in
 \cite{ayan2019age} for a centralized two-hop uplink and downlink scheduling
 problem with heterogenous feedback control loops sharing a cellular network. A
 non-linear age dynamic is derived by using AoI as an intermediate metric and
 utilizing application specific system parameters. The scheduler accounts for
-heterogenous NCS as the proposed age-penalty captures both the evolution of
-individual system uncertainty and estimation error over time. The authors show
-that optimal AoI results in worse control performance compared to their proposed
-greedy VoI scheduling. They extend their findings in \cite{ayan2020optimal} for
-multiple heterogeneous NCS but in a single hop scenario and propose an optimal
-scheduler that minimizes the discounted age-penalty over an infinite time
-horizon. However, similar to existing literature, this solution assumes packet
-loss to be constant over time. To consider time-varying channel conditions,
-\cite{ayan2020aoi} utilizes the same discounted age-penalty but solves the
-scheduling problem using dynamic Programming and stochastic optimization.
-Obtaining such a scheduling policy is computationally expensive and merely
-optimal for a finite horizon.
+heterogenous NCS as the proposed age-penalty captures both the propagation of
+individual system uncertainties and of the estimation error over time. The
+authors show that optimal AoI scheduling results in worse control performance
+compared to their proposed greedy VoI scheduling. They extend their findings in
+\cite{ayan2020optimal} for multiple heterogeneous NCS but in a single hop
+scenario and propose an optimal scheduler that minimizes the discounted
+age-penalty over an infinite time horizon. A discount factor takes the
+importance of short-term and long-term penalties into consideration, hence,
+controlling the scheduler's farsightedness. However, similar to existing
+literature, this solution assumes a Bernoulli loss process. To consider
+time-varying channel conditions, \cite{ayan2020aoi} models packet loss as
+independent and identically distributed (i.i.d) random variables with a
+rectified Gaussian distribution. Although time-varying channel conditions
+prevent the calculation of infinite-horizon scheduling policies, they provide an
+online scheduling policy that is age-optimal for a finite horizon using dynamic
+programming and stochastic optimization. Obtaining such a policy is
+computationally expensive and merely optimal for a finite horizon.
 
 \input{chapters/background}

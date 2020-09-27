@@ -21,30 +21,34 @@ is commonly modeled using the \textit{Gilbert–Elliot} model (GE)
 \cite{gilbert1960capacity, elliott1963estimates}. It is a widely used stochastic
 model for describing bit error processes in transmission channels, where errors
 are correlated. There exits several parameterization of this model, but we will
-be using the specific Markov chain shown in Fig. \ref{fig:GE_FSM}. This model is
-a two-state homogenous Markov chain where each of the two states corresponds to
-high or low channel quality and is called good state $G$ or bad state $B$,
+be using the specific Markov chain shown in Fig.~(\ref{fig:GE_FSM}). This model
+is a two-state homogenous Markov chain where each of the two states corresponds
+to high or low channel quality and is called good state $G$ or bad state $B$,
 respectively. Each of them may generate errors as independent events at a state
 dependent error rate $p_G$ in the good and $p_B$ in the bad state. As shown in
-\cite{hasslinger2008gilbert}, in order to apply the model in data loss
+\cite{hasslinger2008gilbert}, in order to apply the GE model in data loss
 processes, we consider the packet reception process as a sequence of bits: 0
 stands for a successful arrival of a packet whereas 1 denotes a lost or
 corrupted packet.
 
-Let $q_t$ denote the state at time $t$, the GE model is defined by the
-transition matrix $\mathbf{T}$
+Let $q(t)$ denote the state at time $t$, then the GE model is defined by the
+transition matrix $\boldsymbol{T}$
 
-\begin{equation*}
-  \mathbf{T} = \left (\begin{array}{cc} 1-f & f \\ r & 1-r \end{array} \right) 
-\end{equation*}
-\begin{align*}
-  f &= P(q_t = B \mid q_{t-1} = G) \qquad \textrm{failure rate} \\
-  r &= P(q_t = G \mid q_{t-1} = B) \qquad \textrm{recovery rate}
-\end{align*}
+\begin{equation}
+  \boldsymbol{T} = 
+  \begin{bmatrix}
+    1-f & f \\
+    r & 1-r \\
+  \end{bmatrix}
+\end{equation}
+\begin{align}
+  f &= \Pr[q(t) = B \mid q(t-1) = G] \qquad \textrm{failure rate} \\
+  r &= \Pr[q(t) = G \mid q(t-1) = B] \qquad \textrm{recovery rate}
+\end{align}
 
-where $f\in(0,1)$ and $r\in(0,1)$ are the transition probability between states,
-respectively. With these definitions, the stationary state probabilities of the
-good state $\pi_G$ and the bad state $\pi_B$ exist and can be defined as
+where $f\in(0,1)$ and $r\in(0,1)$ are the transition probabilities between
+states, respectively. With these definitions, the stationary state probabilities
+of the good state $\pi_G$ and the bad state $\pi_B$ exist and can be defined as
 follows:
 
 \begin{equation}
@@ -52,8 +56,8 @@ follows:
 \end{equation}
 
 The stationary state probabilities can be interpreted as the average percentage
-of time, in which the channel is in good or bad state. Thus, the \textit{average
-error probability} is obtained as:
+of time, in which the channel is in the good or the bad state. Thus, the
+\textit{average error probability} is obtained as:
 
 \begin{equation}
   p_E = \pi_G p_G + \pi_B p_B
@@ -72,7 +76,7 @@ $\tau_B$. Given the state transition probabilities, the mean sojourn times are:
   T_G = \E[\tau_G] = \frac{1}{f} \quad \textrm{and} \quad T_B = \E[\tau_B] = \frac{1}{r}
 \end{equation}
 
-Table \ref{tab:sojournTime} summarizes sojourn times measurements performed
+Table~(\ref{tab:sojournTime}) summarizes sojourn times measurements performed
 under different GE parameterization. The measurements resembles the expected
 statistical properties of a geometric distribution and confirms our mapping of
 state transition probabilities to their corresponding mean sojourn time.
@@ -120,14 +124,14 @@ problem. We will first describe the principles of the DP algorithm with a
 general decision problem under stochastic uncertainty. To this end, we formulate
 a broadly applicable model of optimal control of a dynamic system over a finite
 number of stages $H$ (a finite horizon). Detailed application of DP to solve our
-scheduling problem will be given in chapter \ref{sec:problem}
+scheduling problem will be given in chapter~(\ref{sec:problem}).
 
 \subsection*{Basic Problem of Decision}
 A general problem of decision has two principal features. An underlying
-discrete-time dynamic system and an \textit{additive} cost function $J$ which is
-to be minimized. The dynamic system expresses the evolution of the system's
-state, under the influence of decisions made at discrete instances of time. The
-system has the form of
+discrete-time dynamic system and an \textit{additive} cost function $J$ to be
+minimized. The dynamic system expresses the evolution of the system's state,
+under the influence of decisions made at discrete instances of time. The system
+has the form of
 
 \begin{equation*}
   x_{k+1} = f_k(x_k, u_k, w_k), \quad k = 0,1,\dots,H-1,
@@ -189,10 +193,10 @@ of starting at $x_0$ is
   J_\pi(x_0) = \E_\pi\left[g_H(x_H) + \sum\limits_{k=0}^{H-1}{g_k(x_k, \mu_k(x_k), w_k)}\right]
 \end{equation}
 
-Since the system can actively solely be manipulated by means of control inputs
-or decision variables $u_k$, the goal is to find a sequence of $u_k$, such that
-the total expected cost is minimal. In other words, we are interested in an
-optimal policy $\pi^*$, such that for $J_\pi(x_0)$ the following counts:
+Since the system can solely be manipulated by means of control inputs or
+decision variables $u_k$, the goal is to find a sequence of $u_k$, such that the
+total expected cost is minimal. In other words, we are interested in an optimal
+policy $\pi^*$, such that for $J_\pi(x_0)$ the following counts:
 
 \begin{equation}
   J_\pi^*(x_0) = \min_{\pi\in\Pi}J_\pi(x_0) = J^*(x_0), \label{eq:HStageProblem}
@@ -253,7 +257,7 @@ given by the last step of the following algorithm:
   
     where the expectation is taken with respect to the probability distribution
     of $w_k$, dependent on $x_k$ and $u_k$. Further, if $u_k^* = \mu_k^*(x_k)$
-    minimizes the right side of Eq. (\ref{eq:DPalgorithm}) for each $x_k$ and
+    minimizes the right side of Eq.~(\ref{eq:DPalgorithm}) for each $x_k$ and
     $k$, the policy $\pi^* = \left\{\mu_0^*,\dots,\mu_{H-1}^*\right\}$ is
     optimal.}}
 \end{center}
