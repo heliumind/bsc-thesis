@@ -1,5 +1,12 @@
 \chapter{Scenario and Problem Statement}
 
+In this chapter, we introduce the considered scenario and give details on the
+system, network and control models assumed in Sec.~(\ref{sec:system}),
+Sec.~(\ref{sec:network}) and Sec.~(\ref{sec:control}) respectively.
+Section.~(\ref{sec:problem}) formulates the wireless resource scheduling problem
+as an optimal control problem to be solved by the proposed scheduling scheme.
+
+\section{System Model} \label{sec:system}
 We consider $N$ independent, linear time-invariant (LTI) control systems sharing
 a wireless communication network. Each individual sub-system $i$ consists of a
 plant $\plant$, a sensor $\sensor$, and a controller $\controller$ with an
@@ -23,7 +30,7 @@ illustrated in Fig.~(\ref{fig:scenario}).
   \label{fig:scenario}
 \end{figure}
 
-\section{Network Model}
+\section{Network Model} \label{sec:network}
 Time is divided into discrete slots which are also the smallest time unit in our
 scenario. We use $t \in \mathbb{N}$ to index time slots. Sensors $\sensor$
 transmit state information over a wireless medium in packets containing a single
@@ -48,18 +55,16 @@ probability $p_i(t) \in \left\{p_G,p_B\right\}$ or received successfully with
 probability $1-p_i(t)$. Given that $\sensor$ is scheduled, let $\gamma_i(t)=1$
 indicate a successful transmission with probability $\Pr[\gamma_i[t]=1 \mid
 \delta_i(t)=1] = 1-p_i(t)$ and $\gamma_i(t)=0$ a failed transmission with
-probability $\Pr[\gamma_i(t)=0 \mid \delta_i(t)=1] = p_i(t)$, respectively. 
-
+probability $\Pr[\gamma_i(t)=0 \mid \delta_i(t)=1] = p_i(t)$, respectively. \\ 
 % For the sake of completeness, note that $\Pr[\gamma_i[t]=1 \mid \delta_i[t]=0]
 % = 0$ and $\Pr[\gamma_i[t]=0 \mid \delta_i[t]=0] = 1$. 
-
 The control-aware scheduler is assumed to be able of measuring the instantaneous
 link quality for each sub-system, thus is aware of the loss probabilities
 $p_i(t)$. Further, the scheduler will make decisions by considering control and
 network behaviors. The network state is comprised of variables defined in the
 following.
 
-\subsection*{Network state}
+\subsection{Network state}
 
 Packets are generated periodically at $\sensor$ every $D_i \in \mathbb{Z}^+$
 slots. We call the generation of a packet a \textit{sampling event} and the time
@@ -123,7 +128,7 @@ $\gamma_i$.
   \label{fig:ageplot}
 \end{figure}  
 
-\section{Control Model}
+\section{Control Model} \label{sec:control}
 
 The system of the $i$-th plant $\plant$ is considered to evolve by the following
 LTI model over discrete time:
@@ -177,7 +182,7 @@ Time dynamics of $t_{i,u}$ is seen in Fig.~(\ref{fig:ageplot}) where it takes
 the value of $t_{i,r}$ at the end of a control system period $t \in
 \mathcal{G}_i$.
 
-\subsection*{Age-of-Information Model}
+\subsection{Age-of-Information Model}
 The discrete-time model allows for communication and control to evolve in
 different time steps. Particularly, in control, changes occur at sampling
 events. Thus, in a control application's point of view, plant observations
@@ -191,28 +196,29 @@ $\controller$ and can be determined at any slot $t$ as:
   \Delta_i(t) = \ceil{\dfrac{t - t_{i,u}(t)}{D_{i}}} 
 \end{equation}
 
-It is important to understand that, since packets arrive at least one slot
-delayed, they can never be utilized to compute the control input of the same
-sampling period in which they are received. Hence, the minimum AoI in our
-scenario is one, i.e., $\Delta_i(t) \ge 1,\forall i,t$.
+It should be noted that, since packets arrive at least one slot delayed, they
+can never be utilized to compute the control input of the same sampling period
+in which they are received. Hence, the minimum AoI in our scenario is one, i.e.,
+$\Delta_i(t) \ge 1,\forall i,t$.
 
-\subsection*{Remote Estimation and Control Law}
-In order to compensate for network-induced packet loss and limited network
+\subsection{Remote Estimation and Control Law}
+In order to compensate for network-induced packet losses and limited network
 resources, we consider an \textit{estimation-based controller}. Each controller
 $\controller$ employs a Kalman-like state estimator $\estimator$ based on the
 assumptions that both are aware of the control system parameters
 $\boldsymbol{A}_i, \boldsymbol{B}_i, \boldsymbol{w}_i$ as well as $t_{i,o}$ and
 $D_i$. These are motivated by the time-invariant nature of the sub-system's
-dynamics and enabling the estimation-based controller to map any $t$ to $k_i$ by
-using Eq.~\eqref{eq:k_map}. In turn, the controller can determine the AoI of its
-most up-to-date plant state information $\boldsymbol{x_i}[k_i-\Delta_i[k_i]]$
-that is $\Delta_i[k_i]$ sampling periods old.
+dynamics and to allow the estimation-based controller to map any $t$ to $k_i$
+by using Eq.~\eqref{eq:k_map}. In turn, the controller can determine the AoI of
+its most up-to-date plant state information
+$\boldsymbol{x_i}[k_i-\Delta_i[k_i]]$ that is $\Delta_i[k_i]$ sampling periods
+old.
 
 Combining our assumptions, each estimator $\estimator$ predicts the current
-plant state as a conditional expectation, i.e., $\hat{\boldsymbol{x}}_i[k_i] =
-\E\left[\boldsymbol{x}_i[k_i] \mid \Delta_i[k_i],\boldsymbol{x}_i[k_i-\Delta_i]
-\right]$. We leverage the results in \cite{ayan2019age}, that the minimal mean
-squared estimation error is achieved by:
+plant state by means of a conditional expectation, i.e.,
+$\hat{\boldsymbol{x}}_i[k_i] = \E\left[\boldsymbol{x}_i[k_i] \mid
+\Delta_i[k_i],\boldsymbol{x}_i[k_i-\Delta_i] \right]$. We leverage the results
+in \cite{ayan2019age}, that the optimal mean-square estimation is obtained by:
 
 \begin{equation}
   \label{eq:estimatedstate}
@@ -222,17 +228,16 @@ squared estimation error is achieved by:
 To perform this estimation, $\estimator$ has to keep track of the last
 $\Delta_i[k_i]$ control inputs. However, this does not involve any additional
 communication effort since this information is generated locally and thus
-already present at $\estimator$.
-
-Further, with Eq.~\eqref{eq:discretemodel} and \eqref{eq:estimatedstate} the
-estimation error $\boldsymbol{e}_i[k_i]$ is obtained as:
+already present at $\estimator$. Further, with Eq.~\eqref{eq:discretemodel} and
+\eqref{eq:estimatedstate} the estimation error $\boldsymbol{e}_i[k_i]$ is
+obtained as:
 
 \begin{equation}
   \boldsymbol{e}_i[k_i] \triangleq \boldsymbol{x}_i[k_i] - \boldsymbol{\hat{x}}_i[k_i] = \sum_{q=1}^{\Delta_i[k_i]} \boldsymbol{A}_i^{q-1} \, \boldsymbol{w}_i[k_i - q].
 \end{equation}
 
-By taking the mean-squared norm of $\boldsymbol{e}_i[k_i]$ the expected mean
-squared error (MSE) at $\controller$ is expressed by:
+By taking the euclidean norm of $\boldsymbol{e}_i[k_i]$ the expected mean
+squared error (MSE) at $\controller$ is given as:
 
 \begin{align}
   \label{eq:estimationerror}
@@ -243,7 +248,7 @@ squared error (MSE) at $\controller$ is expressed by:
 The derivations are found in \cite{ayan2019age}. It is important to note that
 Eq.~\eqref{eq:estimationerror} is only a function of AoI $\Delta_i[k_i]$ and
 independent from the actual system state $\boldsymbol{x}_i[k_i]$. This would not
-be true in the case of time-invariant control systems. Here, we define the
+be true in the case of time-variant control systems. Here, we define
 $g(\Delta_i[k_i])$ as an age-penalty function that penalizes high estimation
 errors and will be subject to minimization in the scheduling problem. 
 
@@ -271,44 +276,120 @@ which solves the discrete time algebraic Riccati equation:
 
 $\boldsymbol{Q}_{i}$ and $\boldsymbol{R}_{i}$ are weighting matrices of
 appropriate size that penalize the state and control inputs in the infinite
-horizon, \textit{linear-quadratic-Gaussian} (LQG) cost function $F_i$:
+horizon, \textit{Linear-quadratic-Gaussian} (LQG) cost function $F_i$:
 
 \begin{equation}
   F_i = \dfrac{1}{K} \limsup_{K \rightarrow \infty} \sum_{k_i=0}^{K-1} (\boldsymbol{x}_i[k_i])^T \boldsymbol{Q}_i \boldsymbol{x}_i[k_i] +  (\boldsymbol{u}_i[k_i])^T \boldsymbol{R}_i \boldsymbol{u}_i[k_i]. 
 \end{equation}
 
 One can interpret $F_i$ as an indicator of control performance. The lower $F_i$
-is, the higher is the \textit{quality of control} QoC.
+is, the higher is the \textit{quality of control}.
 
-\section{Scheduling Problem Formulation} \label{sec:problem}
+\section{Scheduling Problem Formulation} \label{sec:problem} 
 
-From Eq.~\eqref{eq:estimationerror} it becomes evident, that expected estimation
+From Eq.~(\eqref{eq:estimationerror}) it is evident, that expected estimation
 performance is controlled by the AoI of sub-systems. By scheduling a certain
-control application, information with lower $\Delta_i[k_i]$ is provided to its
-estimator, resulting in low age-penalties. Accounting MSE as a cost function,
-our goal is to derive a scheduler that maximizes overall estimation accuracy by
-minimizing the total expected cost. 
+control application, information with low $\Delta_i[k_i]$ is provided to its
+estimator, resulting in low age-penalties. Our goal is to derive a scheduler
+that maximizes overall estimation accuracy by minimizing the total cost. 
 
-We are interested in the class of scheduling policies $\pi$ that consists of a
-sequence of scheduling decisions $\mu(t') \in \left\{\varnothing,1,\dots,N
-\right\}$ for the next $H \in \mathbb{Z}^+$ slots, i.e.,
-$\pi=\left\{\mu(t),\dots\mu(t+H-1) \right\}$. $H$ is the \textit{finite horizon}
-parameter that defines how many future slots are being considered. Thus, $H$
-controls the ``farsightedness'' of the proposed scheduler.
+Denote $\mu(t')\in\left\{\varnothing, 1, \dots,N \right\}$ as the scheduling
+decision at slot $t'$, which indexes the sub-system that is granted medium
+access. Note that $\mu(t')=i$ implies $\delta_i(t')=1$. We are interested in the
+class of scheduling policies $\pi$ that consists of a sequence of scheduling
+decisions $\mu(t')$ for the next $H \in \mathbb{Z}^+$ slots:
 
-Let us define the network state $\boldsymbol{s} \in \mathbb{Z}^{4\cdot N}$ as:
+\begin{equation}
+  \pi=\left\{\mu(t),\dots\mu(t+H-1) \right\}
+\end{equation}
+
+$H$ is the \textit{finite horizon} parameter that defines how many future slots
+are being considered by $\pi$. Thus, $H$ governs the ``farsightedness'' of the
+proposed scheduler.
+
+We consider the wireless resource scheduling problem as a general problem of
+decision under stochastic uncertainty \cite{bertsekas1995dynamic}. Such a
+problem has two principal features. An underlying discrete-time dynamic system
+and an \textit{additive} cost function $J$ that is dependent on the system's
+state. In our case, the dynamic system is the wireless network whose system
+state $\boldsymbol{s} \in \mathbb{Z}^{4\cdot N}$ can be defined as:
 
 \begin{equation}
   \boldsymbol{s}(t) \triangleq \left[\boldsymbol{t}_g(t) \quad \boldsymbol{t}_r(t) \quad \boldsymbol{t}_u(t) \quad \boldsymbol{q}(t)\right]^T, 
-\end{equation} 
+\end{equation}   
 with: 
 \begin{align}
   \boldsymbol{t}_g(t) &\triangleq \left[ t_{1,g}(t) ~ \dots ~ t_{N,g}(t) \right]^T ,\\
   \boldsymbol{t}_r(t) &\triangleq \left[ t_{1,r}(t) ~ \dots ~ t_{N,r}(t) \right]^T ,\\
   \boldsymbol{t}_u(t) &\triangleq \left[ t_{1,u}(t) ~ \dots ~ t_{N,u}(t) \right]^T ,\\
-  \boldsymbol{s}(t) &\triangleq \left[ q_1(t) ~ \dots ~ q_N(t) \right].
-\end{align}
+  \boldsymbol{q}(t) &\triangleq \left[ q_1(t) ~ \dots ~ q_N(t) \right].
+\end{align}  
 
-Each $\mu(t)$ maps the current network to a scheduling decision which indexes
-sub-system that is granted medium access $\mu(t)=i$ implies
-$\delta_i(t)=1$. 
+The evolution of the network's state depends on the outcome of packet
+transmissions over the wireless network. Otherwise speaking, network dynamics
+are affected by random packet loss. As a consequence, given a ``control'' input
+$\mu(t)$ not only one but multiple next network states are possible. Each of
+these transitions follow a probability distribution $Pr\left[\cdot\mid\mu(t),
+\boldsymbol{s}(t) \right]$. While possible next states are under the influence
+of made scheduling decisions, their corresponding transition probability is a
+function of $p_i(t)$ and $f,r$ defined by the GE model. Particularly, given a
+state $\boldsymbol{s}(t)$ and a scheduling decision $\mu(t)=i$, the transition
+probability to a possible next state $\boldsymbol{s'}$ is expressed by:
+
+\begin{equation}
+  \label{eq:transition}
+  \Pr \left[ \boldsymbol{s}(t+1)=\boldsymbol{s}' \mid \mu(t)=i,\boldsymbol{s}(t)
+  \right] \in \left\{ pq \mid p\in\mathcal{L},q\in\mathcal{T} \right\},
+\end{equation}
+
+where $\mathcal{L}=\left\{p_G,p_B\right\}$ and $\mathcal{T}=\left\{f,r\right\}$.
+
+Consider $C(\boldsymbol{s}(t))$ as state cost incurred by being in
+$\boldsymbol{s}(t)$ at time $t$. To penalize high estimation errors, we define
+$C(\boldsymbol{s}(t))$ as the total expected MSE over all sub-systems:
+
+\begin{equation}
+  \label{eq:gfunction}
+  C(\boldsymbol{s}(t)) =  \sum_{i=1}^{N}  g(\Delta_i[k_i(t)])
+\end{equation}
+
+The cost function $J$ is \textit{additive} over time in the sense that cost
+acquired at time $t$, i.e., $C(\boldsymbol{s}(t))$, accumulates over time.
+Meaning, the total expected cost finite horizon cost $J_{\pi}(\boldsymbol{s}
+(t))$ for any initial state $\boldsymbol{s}(t)$ and horizon $H$ is defined as:
+
+\begin{equation}
+  \label{eq:horizoncost}	
+  J_\pi(\boldsymbol{s}(t)) \triangleq \E_\pi \left[ \sum_{t' = t }^{t + H} C(\boldsymbol{s}(t')) \right] 
+\end{equation}
+
+Note that since network transmissions occur stochastically,
+$C(\boldsymbol{s}(t))$ is a random variable and therefore we consider the
+expectation of the total cost. Further, as feasible next states depend on the
+scheduling decisions $\mu(t')$, the subscript $\pi$ in $J_\pi$ and $\E_\pi$
+indicate that Eq.~\eqref{eq:horizoncost} considers the expected cost when the
+scheduling policy $\pi = \{ \mu(t), \, \dots, \, \mu(t + H-1) \}$ is employed
+over the horizon $H$. Our goal is to find the optimal
+policy $\pi^*$, such that $J_{\pi^*}(\boldsymbol{s}(t))$ is minimal:
+
+\begin{equation}
+\label{eq:minimizationproblem}
+	J_{\pi^*}(\boldsymbol{s}(t)) = \min_{\pi \in \Pi} J_\pi (\boldsymbol{s}(t)) = J^*(\boldsymbol{s}(t)),
+\end{equation}
+
+where $\Pi$ is the set of all \textit{admissible} policies. Such policies
+consist of a sequence of possible scheduling decisions given the network state,
+i.e., $\mu(t) \in \mathcal{M}(\boldsymbol{s}(t))$, with:
+
+\begin{equation}
+  \label{eq:admissibleactions}
+  \mathcal{M}(\boldsymbol{s}(t)) = \{\varnothing\} \cup \{i : t_{i,g}(t) > t_{i,r}(t) \}.
+\end{equation}
+
+By doing this, we constrain the action set and only allow sub-systems with new
+information to transmit. $\Pi$ allows us to confine our search for an optimal
+policy with this class of narrowed down set. Thus, the search space as well as
+complexity is reduced without losing optimality. Throughout the remaining
+sections, we refer to the minimization problem in
+Eq.~\eqref{eq:minimizationproblem} as the $H$-stage problem and drop the
+subscript $\pi$ for brevity.

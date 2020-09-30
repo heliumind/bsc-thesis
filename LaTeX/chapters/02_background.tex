@@ -1,0 +1,198 @@
+\chapter{Background}
+
+% In this chapter, all background necessary to understand the thesis are
+% introduced. The level of detail is such that a colleague with similar background
+% (no specialist!) is capable of understanding the contribution and impact of the
+% thesis. A discussion of state-of-the-art solutions (e.g. literature research) is
+% often helpful. Problems of the state-of-the-art are typically discussed and the
+% contribution of the thesis is introduced in detail. 
+
+In this chapter, we first present related work on scheduling in NCS scenarios in
+Section~(\ref{sec:survey}). Afterwards, we give a short introduction to the
+Gilbert-Elliot channel model in Section.~(\ref{sec:GE}). 
+
+\section{Related Work} \label{sec:survey}
+
+% Scheduling for NCSs has initially gained research interest from the control
+% community, where it has been studied as time-triggered and event-triggered
+% control problems \cite{molin2012optimality, molin2014price}. Both papers
+% consider optimizations for the steady-state of an NCS with respect to resource
+% constraints. While the proposed methods ensure optimal steady-state behavior,
+% the network is often assumed control-agnostic and is abstracted. However, 
+% the time-varying nature of wireless channels, the trade-offs among different
+% control-loops and the coexistence of heterogenous traffic types imply that
+% incorporating control metrics in network design can achieve performance benefits
+% on the whole system. \\
+In communication research a trend towards cross-layer network design has been
+shown to be beneficial in NCS settings \cite{park2017wireless}. Error reports
+were the first cross-layer metric considered in a centralized resource
+scheduling problem with multiple NCS sharing a communication channel
+\cite{walsh2001scheduling}. Here, each sensor transmits its estimation error to
+the scheduler. The scheduler then allocates free network resources to
+sub-systems starting from the ones with maximum-error. In order to account for
+underlying time-critical requirements in NCS applications,
+\cite{vilgelm2017control} compares control-agnostic scheduling to control-aware
+schedulers in a single-hop cellular NCS with varying channel qualities among
+control loops. A heuristic scheduling policy is proposed which grants medium
+access greedily to the sub-systems with the highest expected error. They have
+shown, their control-aware scheduler outperforms an agnostic controller in terms
+of maximum throughput with respect to QoC. \cite{vasconcelos2017optimal}
+introduces \textit{one-shot} joint scheduling and estimation problem under
+resource constraints. Here, a network is shared by multiple sensor and estimator
+pairs. Given the probabilistic distributions of individual states, the
+centralized scheduler selects a single sensor-estimator pair to transmit. The
+authors have shown that it is globally optimal to choose the maximum quadratic
+norm as scheduling and mean-value estimation as the estimation strategy. As the
+name one-shot suggests, the paper focuses on a single transmission decision and
+does not consider application-dependent propagation of estimation error over
+multiple time-steps.
+
+This changed in recent years with the introduction of AoI \cite{kaul2012real}.
+Due to its ability to connect control and communication layers, AoI has
+generalized joint design in NCS. In \cite{kadota2018scheduling}, a multi-user
+scenario in which each user is prone to a time-invariant packet loss is
+considered. They formulate a discrete-time wireless scheduling problem and show
+analytically that the minimum AoI is achieved by updating the user with the
+highest AoI. While AoI itself cannot be directly mapped into closed loop control
+applications due to AoI evolving linear in time and uniform for all applications
+by design. Therefore, \cite{kosta2017age} proposed a non-linear aging concept
+called \textit{value-of-information} (VoI) which takes individual application
+dynamics into account. \\
+AoI based application-dependent age penalties, has first been adopted in
+\cite{ayan2019age} for a centralized two-hop uplink and downlink scheduling
+problem with heterogenous feedback control loops sharing a cellular network. A
+non-linear age dynamic is derived by using AoI as an intermediate metric and
+utilizing application specific system parameters. The scheduler accounts for
+heterogenous NCS as the proposed age-penalty captures both the propagation of
+individual system uncertainties and of the estimation error over time. The
+authors show that optimal AoI scheduling results in worse control performance
+compared to their proposed greedy VoI scheduling. They extend their findings in
+\cite{ayan2020optimal} for multiple heterogeneous NCS but in a single hop
+scenario and propose an optimal scheduler that minimizes the discounted
+age-penalty over an infinite time horizon. A discount factor takes the
+importance of short-term and long-term penalties into consideration, hence,
+controlling the scheduler's farsightedness. However, similar to existing
+literature, this solution assumes a Bernoulli loss process. To consider
+time-varying channel conditions, \cite{ayan2020aoi} assumes i.i.d. packet loss
+described by a rectified Gaussian distribution. Although time-varying channel
+conditions prevent the calculation of infinite-horizon scheduling policies, they
+provide an online scheduling policy that is age-optimal for a finite horizon
+using dynamic programming and stochastic optimization. Nonetheless, obtaining
+such a policy is computationally expensive and merely optimal for a finite
+horizon.
+
+\section{Gilbert-Elliot Model} \label{sec:GE}
+
+In a wireless communication environment, channel errors are bursty, location
+dependent, and mobility dependent. These are due to radio propagation
+impairments such as shadowing and multi-path fading, as well as interference
+from neighboring systems and users. In addition, one must take into account that
+users of a wireless network, do not perceive the same channel quality at all
+times, where channel quality is considered high when its bit error rate (BER) is
+low. Thus, there is one wireless channel (link) between each pair of spatially
+distributed nodes (users). 
+
+\begin{figure}[htb]
+  \centering
+  \input{figures/ge_fsm.tex} 
+  \caption{The Markov chain for the Gilbert-Elliot model}
+  \label{fig:GE_FSM}
+\end{figure}
+
+In the literature, the time-varying quality of a bursty error wireless channel
+is commonly modeled using the \textit{Gilbert–Elliot} model (GE)
+\cite{gilbert1960capacity, elliott1963estimates}. It is a widely used stochastic
+model for describing bit error processes in transmission channels, where errors
+are correlated. There exits several parameterization of this model, but we will
+be using the specific Markov chain shown in Fig.~(\ref{fig:GE_FSM}). This model
+is a two-state homogenous Markov chain where each of the two states corresponds
+to high or low channel quality and is called good state $G$ or bad state $B$,
+respectively. Each of them may generate errors as independent events at a state
+dependent error rate $p_G$ in the good and $p_B$ in the bad state. As shown in
+\cite{hasslinger2008gilbert}, in order to apply the GE model in data loss
+processes, we consider the packet reception process as a sequence of bits: 0
+stands for a successful arrival of a packet whereas 1 denotes a lost or
+corrupted packet.
+
+Let $q(t)$ denote the state at time $t$, then the GE model is defined by the
+transition matrix $\boldsymbol{T}$
+
+\begin{equation}
+  \boldsymbol{T} = 
+  \begin{bmatrix}
+    1-f & f \\
+    r & 1-r \\
+  \end{bmatrix},
+\end{equation}
+\begin{align}
+  \label{eq:GE_transition}
+  f &= \Pr[q(t) = B \mid q(t-1) = G] \qquad \textrm{failure rate}, \\
+  r &= \Pr[q(t) = G \mid q(t-1) = B] \qquad \textrm{recovery rate},
+\end{align}
+
+where $f\in(0,1)$ and $r\in(0,1)$ are the transition probabilities between good
+and bad states, respectively. With these definitions, the stationary state
+probabilities of the good state $\pi_G$ and the bad state $\pi_B$ exist and can
+be defined as follows:
+
+\begin{equation}
+  \pi_G = \frac{r}{f+r} \quad \textrm{and} \quad \pi_B = \frac{f}{f+r}
+\end{equation}
+
+The stationary state probabilities can be interpreted as the average percentage
+of time, in which the channel is in the good or the bad state. Thus, the
+\textit{average error probability} is obtained as:
+
+\begin{equation}
+  p_E = \pi_G p_G + \pi_B p_B
+  \label{eq:avgLoss}
+\end{equation}
+
+\subsection*{Average Coherence Time}
+Another important characteristic defined by the GE model is the mean sojourn
+time, i.e., the average duration that the wireless channel stays in a state. In
+common NCS scenarios, packet transmissions occur in discrete time slots. Hence,
+the channel can only change its state in these time slots and the amount of time
+spent in a state is a geometrically distributed random variable $\tau_G$ and
+$\tau_B$. Given the state transition probabilities, the mean sojourn times are:
+
+\begin{equation}
+  T_G = \E[\tau_G] = \frac{1}{f} \quad \textrm{and} \quad T_B = \E[\tau_B] = \frac{1}{r}
+\end{equation}
+
+Table~(\ref{tab:sojournTime}) summarizes sojourn times measurements performed
+under different GE parameterization. The measurements resembles the expected
+statistical properties of a geometric distribution and confirms our mapping of
+state transition probabilities to their corresponding mean sojourn time. Note
+that both $f$ and $r$ control the ``burstiness'' of the modeled channel. For
+instance, the smaller $r$ is, the longer the channel will stay in the bad state
+on average. Hence, longer burst errors are to be expected. Throughout the rest
+of the thesis, we will refer $T_G$ and $T_B$ as \textit{average coherence
+times}.
+
+\begin{table}[h]
+  \begin{center}
+  \begin{tabular}{|p{3.5cm}|c|c|c|c|}
+  \hline 
+  & \multicolumn{2}{|c|}{\textbf{Time in Good}} &
+  \multicolumn{2}{|c|}{\textbf{Time in Bad}} \\
+  \hline
+  \textbf{Failure rate} $f$ / \textbf{Recovery rate} $r$ & \textbf{mean} & \textbf{std} & \textbf{mean}
+  & \textbf{std}\\
+  \hline \hline
+  0.3 & 3.34 & 2.74 & 3.32 & 2.77 \\
+  \hline 
+  0.1 & 10.0 & 9.56 & 10.0 & 9.29 \\
+  \hline 
+  0.03 & 33.4 & 32.6 & 34.1 & 34.1 \\
+  \hline 
+  0.01 & 94.3 & 89.5 & 98.1 & 99.6 \\
+  \hline 
+  \end{tabular}
+  \caption[Measurement of average coherence time]{Measurement of average
+  coherence times for different transition probabilities. Note that the state
+  transition probabilities are chosen symmetrically for this measurement, i.e.
+  $f=r$}
+  \label{tab:sojournTime}
+\end{center}
+\end{table}
