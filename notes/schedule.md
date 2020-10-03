@@ -6,4 +6,4 @@
  - 03.07. Add Gilbert Elliot channel behavior and GE aware scheduling
  - 24.09. Evaluation
  - 19.09. Start writing
- - ### Sumission is October 19th
+ - ### Submission is October 19th
