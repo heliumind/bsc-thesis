@@ -1,5 +1,209 @@
 \chapter{Scheduler Design}
 
-\section{Finite Horizon Scheduler}
+In this chapter, we develop an online scheduling scheme that solves the $H$
+stage-problem by employing Dynamic Programming and Stochastic Optimization.
+First, Sec. \ref{sec:fhscheduler} summarizes the state-of-the-art Finite Horizon
+Scheduler which our proposed scheduler is based on. We extend it to be
+applicable in NCS scenarios with Gilbert-Elliot channels and give a short
+complexity analysis in Sec. \ref{sec:gescheduler}.
 
-\section{Gilbert-Elliot channel-aware Scheduler}
+\section{Finite Horizon Scheduler} \label{sec:fhscheduler}
+
+In \cite{ayan2020aoi} a \textit{finite horizon scheduler (FHS)} is proposed
+which takes optimal scheduling decisions for the next $H$ transmission slots. In
+contrast to our scenario, independent losses drawn from a normal distribution
+are considered, not accounting for GE channel state transitions, i.e.,
+$\boldsymbol{s}(t) = \left[\boldsymbol{t}_g(t) \quad \boldsymbol{t}_r(t) \quad
+\boldsymbol{t}_u(t) \right]^T$. This also means, that network state transitions
+are solely dependent on packet loss probabilities.  
+
+FHS solves the formulated $H$-stage problem by applying the Dynamic Programming
+Algorithm (DP) \cite{bertsekas1995dynamic}. The fundamental idea behind DP is to
+break down a complicated problem into simpler subproblems, obtaining the
+solution by iteratively combining solutions of small subproblems in a
+bottom-up-approach. This is motivated by the \textit{principle of optimality},
+which intuitively states that every optimal policy consists only of optimal sub
+policies. That is, assume $\pi^* = \{\mu^*(t), \mu^*(t+1), \dots, \mu^*(t+H-1)
+\}$ to be an optimal policy for the $H$-stage problem. For the subproblem
+whereby we are at at time $i>t$ and wish to minimize the \textit{cost-to-go}
+from $\boldsymbol{s}(i)$ at time $i$ to time $H$, i.e.,
+
+\begin{equation}
+  \label{eq:costtogo}
+  \min_{\pi\in\Pi}{J(\boldsymbol{s}(i)) = \E \left[ \sum_{t' = i }^{i+H} C(\boldsymbol{s}(t')) \right]},
+\end{equation}
+
+the policy $\left\{ \mu^*(i), \mu^*(i+1), \dots, \mu^*(t+H-1) \right\}$ is
+optimal for this subproblem. Thus, an optimal scheduling policy can be
+constructed in a piece-by-piece fashion by first solving the ``tail'' $H$-stage
+subproblem involving stage $H-1$ and continuing iteratively backwards to stage
+$0$. 
+
+The FHS searches for an optimal policy in a tree structure, where each node
+represents a network state $\boldsymbol{s}(t')$ at time $t'$ with $t \leq t'
+\leq t+H$. The root of the tree corresponds to the current network state
+$\boldsymbol{s}(t)$. In addition, nodes occurring in the same slot form a level,
+where the root node is the 0-th level of the tree. Similarly, nodes in the last
+level $H$ are called \textit{leaf nodes}. Each node is assigned with the
+cost-to-go according to Eq.~\eqref{eq:costtogo} with its network state as
+initial state $\boldsymbol{s}(i)$. By doing this, minimizing the total expected
+cost means finding the shortest path in the described tree. The optimal
+scheduling policy is then constructed from the scheduling decisions taken at
+each level needed to take the shortest path.
+
+Fig.~(\ref{fig:FHStree}) depicts an example tree with $H=1$ and $N=2$. Notice,
+that for this example the optimal scheduling policy $\pi^*$ consists of only one
+scheduling decision $\mu^*(t) \in \left\{\varnothing, 1, 2 \right\}$ which
+determines the shortest path from Level 1 to 0 and achieves the optimal cost
+$J^*(\boldsymbol{s}(t))$ w.r.t. Eq.~\eqref{eq:horizoncost}:
+
+\begin{align*}
+  \mu^*(t) =& \argmin_{\mu(t)}{J(\boldsymbol{s}(t))}
+  = \argmin_{\mu(t)}{\E \left[ \sum_{t' = t }^{t + 1} C(\boldsymbol{s}(t')) \right]} \\
+  =& \left\{
+  \underbrace{\Pr[0|\varnothing] \cdot C(\boldsymbol{s}_3)}_{\mu(t)=\varnothing}, \,
+  \underbrace{\Pr[1|1] \cdot C(\boldsymbol{s}_1) + \Pr[0|1] \cdot C(\boldsymbol{s}_3)}_{\mu(t)=1}, \,
+  \underbrace{\Pr[1|2] \cdot C(\boldsymbol{s}_2) + \Pr[0|2] \cdot C(\boldsymbol{s}_3)}_{\mu(t)=2} 
+  \right\}
+\end{align*}
+
+
+\begin{figure}[htb]
+	\centering
+	\resizebox{.8\columnwidth}{!}{\input{figures/fhs_treeexample}}
+  \caption[Example tree structure for FHS with 2 sub-systems and Finite Horizon
+  1]{Example $1$ level tree structure with $2$ sub-systems, i.e., $H=1$ and
+  $N=2$. Each edge is labeled with the corresponding transition probability,
+  i.e., $\Pr{[\gamma_{\mu(t)}(t)\mid \mu(t)]}$ as the conditional probability
+  for the possible next network state to occur given the scheduling decision.
+  The states $\textbf{s}_1$ and $\textbf{s}_2$ represent the cases where
+  scheduled sub-systems successfully transmit their latest observation to the
+  controller while $\textbf{s}_3$ represents the failure case where every
+  sub-system fails to receive the transmitted packet.}
+	\label{fig:FHStree}
+\end{figure}
+
+\section{Channel-aware Finite Horizon Scheduler} \label{sec:gescheduler}
+
+We extend the introduced FHS with a \textit{Gilbert-Elliot channel-aware
+Scheduler (GES)}, that takes channel state transitions for each link into
+consideration. Similarly, GES utilizes the DP algorithm in order to solve the
+$H$-stage problem. Namely, starting at state $\boldsymbol{s}(t)$ and time $t$,
+the optimal final horizon cost $J^*(\boldsymbol{s}(t))$ is given by the last
+step of the following algorithm:
+
+
+\begin{center}
+  \fbox{
+    \parbox{0.9\textwidth}{
+      Iterate backwards from $t'=t+H-1$ to $t'=t$
+      \begin{equation} 
+        \label{eq:dynamicprogramming}
+        J_{t'}(\boldsymbol{s}(t')) = \min_{\mu(t') \in \mathcal{M}(\boldsymbol{s}(t'))} \E \left[ C(\boldsymbol{s}(t')) + J_{t' + 1}(\boldsymbol{s}(t' + 1))\right],
+      \end{equation} 
+      with the terminal cost: 
+      \begin{equation}
+        \label{eq:terminalcost}
+        J_{t + H}(\boldsymbol{s}(t + H)) = C(\boldsymbol{s}(t + H)) 
+      \end{equation}
+      The expectation is taken with respect to the total MSE in the network as
+      defined in Eq.~\eqref{eq:estimationerror} and Eq.~\eqref{eq:gfunction}.}
+  }
+\end{center}
+  
+
+According to the principle of optimality, if at each stage $t'$ the optimal
+$\mu^*(t')$ action w.r.t to Eq.~\eqref{eq:dynamicprogramming} is taken, the
+policy $\pi^* = \{\mu^*(t), \mu^*(t+1), \dots, \mu^*(t + H-1)\}$ is optimal and
+achieves the minimum cost $J_{\pi^*}(\boldsymbol{s}(t)) = J_t(\boldsymbol{s}(t))
+$. The proof can be found in \cite{bertsekas1995dynamic}.
+
+\subsection{Algorithm}
+The main difference to FHS lies in the size of the tree. The evolution of
+network state $\boldsymbol{s}(t)$ with a GE channel not only depends on the
+outcome of packet transmissions but is also simultaneously affected by the fact
+that each link can change or retain their GE channel state $\boldsymbol{q}(t) $.
+For instance, given $\delta_i(t)=1$, a successful transmission, i.e.,
+$\gamma_i(t)=1$, can occur while Link $i$ changes or stays in Good/Bad state at
+the same time. Provided any $\boldsymbol{s}(t')$, there exists $N$ individual
+communication links. Thus, $2^N$ different GE channel transitions are possible
+in the following time slot $t'+1$. Further, for each of these $2^N$ channel
+states $\boldsymbol{q}(t'+1)$, $N+1$ network outcomes due to packet transmission
+are possible, which correspond to $N$ successful transmissions for each link and
+a common failed state. Compared to the FHS, each node in such a tree has $2^N$
+times more child nodes. Fig.~(\ref{fig:GEStree}) shows a minimal tree for $N=2$,
+$H=1$ and initial state $\boldsymbol{s}(t)=\left[t\quad t\quad a\quad b\quad
+c\quad d\quad G\quad G \right]^T$.
+
+In analogy to FHS, the backwards iteration employed by the DP algorithm can be
+seen as traversing through all nodes of the tree level by level starting from
+the leaf level while taking the optimal action at each level minimizing the
+expected cost in the next level. Again, each node is assigned with a cost
+obtained from Eq.~\eqref{eq:dynamicprogramming}. As a result, the operation of
+the GE channel-aware FH scheduler can be summarized in the following steps:
+
+\begin{enumerate}
+	\item Initialize the current state $\boldsymbol{s}(t)$ as the root of a tree
+	structure.
+	\item Starting from the root, determine the possible actions at each node,
+	i.e., $\mathcal{M}\boldsymbol{s}(t')$ for $\{t': t \leq t' < t + H \}$ and
+	subsequently all possible next states $\boldsymbol{s}(t' + 1)$ when action
+	$\mu(t')$ is taken.
+	\item Add all possible next states as child nodes to the next level of the
+	tree with the corresponding transition probabilities from the parent node.
+	\item Repeat steps (2)-(4) until the $H$-th level of the tree is constructed.
+	\item Assign costs to all states starting from the leaf nodes as in
+	Eq.~\eqref{eq:dynamicprogramming} and \eqref{eq:terminalcost}.
+\end{enumerate}
+
+\begin{sidewaysfigure}
+	\centering
+  \input{figures/ges_treeexample} 
+  \caption[Example tree structure for GES with 2 sub-systems and Finite Horizon
+  1]{Example $1$ level tree structure in a GE channel with $2$ sub-systems,
+  i.e., $H=1$ and $N=2$. An initial state $\boldsymbol{s}(t)=\left[t\quad t\quad
+  a\quad b\quad c\quad d\quad G\quad G \right]^T$ is assumed. $\boldsymbol{q}_
+  {1\dots 4}$ resemble the $2^N=4$ possible GE channel states, each labeled with
+  the corresponding transition probability. Each of these intermediate nodes
+  form the root of the tree shown in Fig.~(\ref{fig:FHStree}). In these
+  $\Pr[\gamma_{\mu(t)}(t)\mid \mu(t)]$ stands for the conditional probability
+  for the possible next network state to occur given the scheduling decision.
+  For each $\boldsymbol{q}_{1\dots 4}$, the first two child nodes correspond to
+  the success state while the third child node is the shared failed state.}
+	\label{fig:GEStree}
+\end{sidewaysfigure}
+
+Furthermore, it should be emphasized, that although the obtained optimal policy
+$\pi^*$ consists of $H$ optimal scheduling decisions, only the action at level 0
+is applied. This is because the root of the tree changes after each slot,
+causing the remaining $H-1$ actions to be not optimal anymore. Hence, steps
+(1)-(6) have to be repeated every time slot as well. 
+
+\subsection{Complexity}
+
+The complexity of the GES is governed by both the construction of the tree and
+the search for the shortest path. The worst-case scenario in terms of complexity
+takes place when all sub-systems in the network are sampled every slot, i.e.,
+$D_i=1$. Then every node in the tree will have $2^N(N+1)$ child nodes. The total
+amount of nodes $n$ in a perfect $m$-ary tree is computed by:
+
+\begin{equation}
+  n = \sum_{i=0}^{h}m^i = \frac{m^{h+1}-1}{m-1}
+\end{equation}
+Applied to our tree with $m=2^N(N+1)$ and $h=H$: 
+\begin{equation}
+  n = \frac{(2^N(N+1))^{H+1}-1}{2^N(N+1)-1} 
+\end{equation} 
+
+Depending on how often each node is visited in the concrete implementation, the
+complexity becomes $c \cdot n$, where $c$ is a positive constant. However, in
+simplified Big-O notation, $c$ can be omitted and the complexity is given as
+$\mathcal{O}(2^N)$. This corresponds to a brute-force search for the shortest
+path in our constructed tree. The amount of nodes and complexity can be reduced
+by increasing the sampling period. As packets are only generated at sampling
+events, if a sub-systems succeeds to transmit its plant measurement from that
+sampling period, it will not have any new packet to transmit for the rest of
+sampling period. Thus, the number of possible actions at these states will not
+incorporate said sub-systems. In other words, if $t_{i,g}(t) = t_{i,r}(t)$, then
+$i \not \in \mathcal{M}(t)$, thereby, reducing the amount of nodes in the next
+level.

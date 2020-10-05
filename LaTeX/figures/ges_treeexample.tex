@@ -1,0 +1,77 @@
+\begin{tikzpicture}[>=latex] 
+\def\nodesize{1cm}
+\def\leveliSize{-4cm}
+\def\levelOneSize{-10cm}
+
+%Root
+\node (s0) at (0,0) [draw, circle, align=center, inner sep=0pt, minimum size=\nodesize] {\scriptsize$\boldsymbol{s}(t)$};
+
+%Intermediate level
+\node (q1) at (-7.5,\leveliSize) [draw, circle, align=center, inner sep=0pt, minimum size=\nodesize] {\scriptsize$\boldsymbol{q}_1(t+1)$};
+\node (q2) at (-2.5,\leveliSize) [draw, circle, align=center, inner sep=0pt, minimum size=\nodesize] {\scriptsize$\boldsymbol{q}_2(t+1)$};
+\node (q3) at (2.5,\leveliSize) [draw, circle, align=center, inner sep=0pt, minimum size=\nodesize] {\scriptsize$\boldsymbol{q}_3(t+1)$};
+\node (q4) at (7.5,\leveliSize) [draw, circle, align=center, inner sep=0pt, minimum size=\nodesize] {\scriptsize$\boldsymbol{q}_4(t+1)$};
+
+%Level 1
+\node (s1) at (-9,\levelOneSize) [draw, circle, align=center, inner sep=0pt, minimum size=\nodesize] {\scriptsize$\boldsymbol{s}_1(t+1)$};
+\node (s2) at (-7.5,\levelOneSize) [draw, circle, align=center, inner sep=0pt, minimum size=\nodesize] {\scriptsize$\boldsymbol{s}_2(t+1)$};
+\node (s3) at (-6,\levelOneSize) [draw, circle, align=center, inner sep=0pt, minimum size=1cm] {\scriptsize$\boldsymbol{s}_3(t+1)$};
+\node (s4) at (-4,\levelOneSize) [draw, circle, align=center, inner sep=0pt, minimum size=1cm] {\scriptsize$\boldsymbol{s}_4(t+1)$};
+\node (s5) at (-2.5,\levelOneSize) [draw, circle, align=center, inner sep=0pt, minimum size=1cm] {\scriptsize$\boldsymbol{s}_5(t+1)$};
+\node (s6) at (-1,\levelOneSize) [draw, circle, align=center, inner sep=0pt, minimum size=1cm] {\scriptsize$\boldsymbol{s}_6(t+1)$};
+\node (s7) at (1,\levelOneSize) [draw, circle, align=center, inner sep=0pt, minimum size=1cm] {\scriptsize$\boldsymbol{s}_7(t+1)$};
+\node (s8) at (2.5,\levelOneSize) [draw, circle, align=center, inner sep=0pt, minimum size=1cm] {\scriptsize$\boldsymbol{s}_8(t+1)$};
+\node (s9) at (4,\levelOneSize) [draw, circle, align=center, inner sep=0pt, minimum size=1cm] {\scriptsize$\boldsymbol{s}_9(t+1)$};
+\node (s10) at (6,\levelOneSize) [draw, circle, align=center, inner sep=0pt, minimum size=1cm] {\scriptsize$\boldsymbol{s}_{10}(t+1)$};
+\node (s11) at (7.5,\levelOneSize) [draw, circle, align=center, inner sep=0pt, minimum size=1cm] {\scriptsize$\boldsymbol{s}_{11}(t+1)$};
+\node (s12) at (9,\levelOneSize) [draw, circle, align=center, inner sep=0pt, minimum size=1cm] {\scriptsize$\boldsymbol{s}_{12}(t+1)$};
+
+\path[->] (s0) edge node [sloped, above] {\scriptsize$\Pr[q(t)=G|q(t+1)=G]\cdot \Pr[G|G]$} (q1);
+\path[->] (s0) edge node [sloped, above] {\scriptsize$\Pr[G|G]\cdot \Pr[B|G]$} (q2);
+\path[->] (s0) edge node [sloped, above] {\scriptsize$\Pr[B|G]\cdot \Pr[G|G]$} (q3);
+\path[->] (s0) edge node [sloped, above] {\scriptsize$\Pr[B|G]\cdot \Pr[B|G]$} (q4);
+
+\path[->] (q1) edge node [sloped, above] {\scriptsize$\Pr[\gamma_{1}(t)=1|\mu(t)=1]$} (s1);
+\path[->] (q1) edge node [sloped, rotate=180, above] {\scriptsize$\Pr[1| 2]$} (s2);
+\path[->] (q1) edge node [sloped, above]{\scriptsize$\Pr[0|1]$} (s3);
+\path[->, bend left=30] (q1) edge node [sloped, above]{\scriptsize$\Pr[0|2]$} (s3);
+\path[->, bend left=60] (q1) edge node [sloped, above]{\scriptsize$\Pr[0|\varnothing]$} (s3);
+
+\path[->] (q2) edge node [sloped, above] {\scriptsize$\Pr[\gamma_{1}(t)=1|\mu(t)=1]$} (s4);
+\path[->] (q2) edge node [sloped, rotate=180, above] {\scriptsize$\Pr[1| 2]$} (s5);
+\path[->] (q2) edge node [sloped, above]{\scriptsize$\Pr[0|1]$} (s6);
+\path[->, bend left=30] (q2) edge node [sloped, above]{\scriptsize$\Pr[0|2]$} (s6);
+\path[->, bend left=60] (q2) edge node [sloped, above]{\scriptsize$\Pr[0|\varnothing]$} (s6);
+
+\path[->] (q3) edge node [sloped, above] {\scriptsize$\Pr[\gamma_{1}(t)=1|\mu(t)=1]$} (s7);
+\path[->] (q3) edge node [sloped, rotate=180, above] {\scriptsize$\Pr[1| 2]$} (s8);
+\path[->] (q3) edge node [sloped, above]{\scriptsize$\Pr[0|1]$} (s9);
+\path[->, bend left=30] (q3) edge node [sloped, above]{\scriptsize$\Pr[0|2]$} (s9);
+\path[->, bend left=60] (q3) edge node [sloped, above]{\scriptsize$\Pr[0|\varnothing]$} (s9);
+
+\path[->] (q4) edge node [sloped, above] {\scriptsize$\Pr[\gamma_{1}(t)=1|\mu(t)=1]$} (s10);
+\path[->] (q4) edge node [sloped, rotate=180, above] {\scriptsize$\Pr[1| 2]$} (s11);
+\path[->] (q4) edge node [sloped, above]{\scriptsize$\Pr[0|1]$} (s12);
+\path[->, bend left=30] (q4) edge node [sloped, above]{\scriptsize$\Pr[0|2]$} (s12);
+\path[->, bend left=60] (q4) edge node [sloped, above]{\scriptsize$\Pr[0|\varnothing]$} (s12);
+
+\node (lev0) [] at (-10.5,0) {Level 0};
+\draw [dashed,mygray, very thick] (lev0.east) to node [] (xyz) {} (s0.west);
+\draw [dashed,mygray, very thick] (s0.east) to node [] (xyz) {} (10,0);
+
+\node (lev1) [] at (-10.5,\levelOneSize) {Level 1};
+
+\draw [dashed, mygray,very thick] (lev1.east) to node [] (xyz) {} (s1.west);
+\draw [dashed, mygray,very thick] (s1.east) to node [] (xyz) {} (s2.west);
+\draw [dashed, mygray,very thick] (s2.east) to node [] (xyz) {} (s3.west);
+\draw [dashed, mygray,very thick] (s3.east) to node [] (xyz) {} (s4.west);
+\draw [dashed, mygray,very thick] (s4.east) to node [] (xyz) {} (s5.west);
+\draw [dashed, mygray,very thick] (s5.east) to node [] (xyz) {} (s6.west);
+\draw [dashed, mygray,very thick] (s6.east) to node [] (xyz) {} (s7.west);
+\draw [dashed, mygray,very thick] (s7.east) to node [] (xyz) {} (s8.west);
+\draw [dashed, mygray,very thick] (s8.east) to node [] (xyz) {} (s9.west);
+\draw [dashed, mygray,very thick] (s9.east) to node [] (xyz) {} (s10.west);
+\draw [dashed, mygray,very thick] (s10.east) to node [] (xyz) {} (s11.west);
+\draw [dashed, mygray,very thick] (s11.east) to node [] (xyz) {} (s12.west);
+
+\end{tikzpicture}

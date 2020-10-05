@@ -205,20 +205,29 @@ $\Delta_i(t) \ge 1,\forall i,t$.
 In order to compensate for network-induced packet losses and limited network
 resources, we consider an \textit{estimation-based controller}. Each controller
 $\controller$ employs a Kalman-like state estimator $\estimator$ based on the
-assumptions that both are aware of the control system parameters
-$\boldsymbol{A}_i, \boldsymbol{B}_i, \boldsymbol{w}_i$ as well as $t_{i,o}$ and
-$D_i$. These are motivated by the time-invariant nature of the sub-system's
-dynamics and to allow the estimation-based controller to map any $t$ to $k_i$
-by using Eq.~\eqref{eq:k_map}. In turn, the controller can determine the AoI of
-its most up-to-date plant state information
-$\boldsymbol{x_i}[k_i-\Delta_i[k_i]]$ that is $\Delta_i[k_i]$ sampling periods
-old.
+following assumptions:
+
+\begin{theorem}
+  The controller $\controller$ and its estimator $\estimator$ are sware of the
+  control system parameters $\boldsymbol{A}_i, \boldsymbol{B}_i$ and
+  $\boldsymbol{w}_i$.
+\end{theorem}
+
+\begin{theorem}
+  $t_{i,o}, D_i$ and $t$ are known by the controller. 
+\end{theorem}
+
+Assumption 1 is motivated by the time-invariant nature of the sub-system's
+dynamics. Assumption 2 allows the estimation-based controller to map any $t$ to
+$k_i$ by using Eq.~\eqref{eq:k_map}. As a result, the controller can determine
+the AoI of its most up-to-date plant state information $\boldsymbol{x_i}[k_i -
+\Delta_i[k_i]]$ that is $\Delta_i[k_i]$ sampling periods old.
 
 Combining our assumptions, each estimator $\estimator$ predicts the current
 plant state by means of a conditional expectation, i.e.,
-$\hat{\boldsymbol{x}}_i[k_i] = \E\left[\boldsymbol{x}_i[k_i] \mid
-\Delta_i[k_i],\boldsymbol{x}_i[k_i-\Delta_i] \right]$. We leverage the results
-in \cite{ayan2019age}, that the optimal mean-square estimation is obtained by:
+$\hat{\boldsymbol{x}}_i[k_i] = \E\left[\boldsymbol{x}_i[k_i] \mid \Delta_i[k_i],
+\boldsymbol{x}_i[k_i-\Delta_i] \right]$. We leverage the results in
+\cite{ayan2019age}, that the optimal mean-square estimation is obtained by:
 
 \begin{equation}
   \label{eq:estimatedstate}
@@ -287,25 +296,24 @@ is, the higher is the \textit{quality of control}.
 
 \section{Scheduling Problem Formulation} \label{sec:problem} 
 
-From Eq.~(\eqref{eq:estimationerror}) it is evident, that expected estimation
+From Eq.~\eqref{eq:estimationerror} it is evident, that expected estimation
 performance is controlled by the AoI of sub-systems. By scheduling a certain
 control application, information with low $\Delta_i[k_i]$ is provided to its
 estimator, resulting in low age-penalties. Our goal is to derive a scheduler
-that maximizes overall estimation accuracy by minimizing the total cost. 
-
-Denote $\mu(t')\in\left\{\varnothing, 1, \dots,N \right\}$ as the scheduling
-decision at slot $t'$, which indexes the sub-system that is granted medium
-access. Note that $\mu(t')=i$ implies $\delta_i(t')=1$. We are interested in the
-class of scheduling policies $\pi$ that consists of a sequence of scheduling
-decisions $\mu(t')$ for the next $H \in \mathbb{Z}^+$ slots:
+that maximizes overall estimation accuracy by minimizing the total cost. Denote
+$\mu(t')\in\left\{\varnothing, 1, \dots,N \right\}$ as the scheduling decision
+at slot $t'$, which indexes the sub-system that is granted medium access. Note
+that $\mu(t')=i$ implies $\delta_i(t')=1$. We are interested in the class of
+scheduling policies $\pi$ that consists of a sequence of scheduling decisions
+$\mu(t')$ for the next $H \in \mathbb{Z}^+$ slots:
 
 \begin{equation}
-  \pi=\left\{\mu(t),\dots\mu(t+H-1) \right\}
+  \pi=\left\{ \mu(t), \mu(t+1), \dots, \mu(t+H-1) \right\}
 \end{equation}
 
-$H$ is the \textit{finite horizon} parameter that defines how many future slots
-are being considered by $\pi$. Thus, $H$ governs the ``farsightedness'' of the
-proposed scheduler.
+Such policies will be called \textit{admissible}. $H$ is the \textit{finite
+horizon} parameter that defines how many future slots are being considered by
+$\pi$. Thus, $H$ governs the ``farsightedness'' of the proposed scheduler.
 
 We consider the wireless resource scheduling problem as a general problem of
 decision under stochastic uncertainty \cite{bertsekas1995dynamic}. Such a
@@ -339,10 +347,13 @@ probability to a possible next state $\boldsymbol{s'}$ is expressed by:
 \begin{equation}
   \label{eq:transition}
   \Pr \left[ \boldsymbol{s}(t+1)=\boldsymbol{s}' \mid \mu(t)=i,\boldsymbol{s}(t)
-  \right] \in \left\{ pq \mid p\in\mathcal{L},q\in\mathcal{T} \right\},
+  \right] \in \left\{ p \cdot q \mid p\in\mathcal{L},q\in\mathcal{T} \right\},
 \end{equation}
 
-where $\mathcal{L}=\left\{p_G,p_B\right\}$ and $\mathcal{T}=\left\{f,r\right\}$.
+where $\mathcal{L}=\left\{p_G,p_B\right\}$ are GE channel state dependent loss
+probabilities and $\mathcal{T}=\left\{f,r\right\}$ elements of the underlying
+Markov chain's stochastic state transition defined in
+Eq.~\eqref{eq:GE_transition}.
 
 Consider $C(\boldsymbol{s}(t))$ as state cost incurred by being in
 $\boldsymbol{s}(t)$ at time $t$. To penalize high estimation errors, we define
@@ -350,13 +361,16 @@ $C(\boldsymbol{s}(t))$ as the total expected MSE over all sub-systems:
 
 \begin{equation}
   \label{eq:gfunction}
-  C(\boldsymbol{s}(t)) =  \sum_{i=1}^{N}  g(\Delta_i[k_i(t)])
+  C(\boldsymbol{s}(t)) =  \sum_{i=1}^{N}  g(\Delta_i[k_i(t)]),
 \end{equation}
+
+where $g(\Delta_i[k_i(t)])$ is the expected estimation error of a single
+sub-system as defined in Eq.~\eqref{eq:estimationerror}. 
 
 The cost function $J$ is \textit{additive} over time in the sense that cost
 acquired at time $t$, i.e., $C(\boldsymbol{s}(t))$, accumulates over time.
-Meaning, the total expected cost finite horizon cost $J_{\pi}(\boldsymbol{s}
-(t))$ for any initial state $\boldsymbol{s}(t)$ and horizon $H$ is defined as:
+Meaning, the total expected finite horizon cost $J_{\pi}(\boldsymbol{s} (t))$
+for any initial state $\boldsymbol{s}(t)$ and horizon $H$ is defined as:
 
 \begin{equation}
   \label{eq:horizoncost}	
@@ -368,28 +382,27 @@ $C(\boldsymbol{s}(t))$ is a random variable and therefore we consider the
 expectation of the total cost. Further, as feasible next states depend on the
 scheduling decisions $\mu(t')$, the subscript $\pi$ in $J_\pi$ and $\E_\pi$
 indicate that Eq.~\eqref{eq:horizoncost} considers the expected cost when the
-scheduling policy $\pi = \{ \mu(t), \, \dots, \, \mu(t + H-1) \}$ is employed
-over the horizon $H$. Our goal is to find the optimal
-policy $\pi^*$, such that $J_{\pi^*}(\boldsymbol{s}(t))$ is minimal:
+scheduling policy $\pi = \{ \mu(t), \mu(t+1), \dots, \mu(t+H-1) \}$ is employed
+over the horizon $H$. Our goal is to find the optimal policy $\pi^*$, such that
+$J_{\pi^*}(\boldsymbol{s}(t))$ is minimal:
 
 \begin{equation}
 \label{eq:minimizationproblem}
 	J_{\pi^*}(\boldsymbol{s}(t)) = \min_{\pi \in \Pi} J_\pi (\boldsymbol{s}(t)) = J^*(\boldsymbol{s}(t)),
 \end{equation}
 
-where $\Pi$ is the set of all \textit{admissible} policies. Such policies
-consist of a sequence of possible scheduling decisions given the network state,
-i.e., $\mu(t) \in \mathcal{M}(\boldsymbol{s}(t))$, with:
+where $\Pi$ is the set of all admissible policies. In addition, we constrain the
+set of possible actions given the network state $\boldsymbol{s}(t)$ at each time
+slot $t$ to only allow sub-systems with new information to transmit, i.e.,
+$\mu(t) \in \mathcal{M}(\boldsymbol{s}(t))$, with:
 
 \begin{equation}
   \label{eq:admissibleactions}
   \mathcal{M}(\boldsymbol{s}(t)) = \{\varnothing\} \cup \{i : t_{i,g}(t) > t_{i,r}(t) \}.
 \end{equation}
 
-By doing this, we constrain the action set and only allow sub-systems with new
-information to transmit. $\Pi$ allows us to confine our search for an optimal
-policy with this class of narrowed down set. Thus, the search space as well as
-complexity is reduced without losing optimality. Throughout the remaining
-sections, we refer to the minimization problem in
-Eq.~\eqref{eq:minimizationproblem} as the $H$-stage problem and drop the
-subscript $\pi$ for brevity.
+This allows us to confine our search for an optimal policy within this class of
+narrowed down set. Together with the search space, the scheduler's complexity is
+also reduced without losing optimality. Throughout the remaining sections, we
+refer to the minimization problem in Eq.~\eqref{eq:minimizationproblem} as the
+$H$-stage problem and drop the subscript $\pi$ for brevity.

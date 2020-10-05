@@ -9,7 +9,7 @@
 
 In this chapter, we first present related work on scheduling in NCS scenarios in
 Section~(\ref{sec:survey}). Afterwards, we give a short introduction to the
-Gilbert-Elliot channel model in Section.~(\ref{sec:GE}). 
+Gilbert-Elliot Channel Model in Section.~(\ref{sec:GE}). 
 
 \section{Related Work} \label{sec:survey}
 
@@ -94,13 +94,13 @@ distributed nodes (users).
 
 \begin{figure}[htb]
   \centering
-  \input{figures/ge_fsm.tex} 
-  \caption{The Markov chain for the Gilbert-Elliot model}
+  \input{figures/ge_fsm} 
+  \caption{The Markov chain for the Gilbert-Elliot Model}
   \label{fig:GE_FSM}
 \end{figure}
 
 In the literature, the time-varying quality of a bursty error wireless channel
-is commonly modeled using the \textit{Gilbert–Elliot} model (GE)
+is commonly modeled using the \textit{Gilbert–Elliot} Model (GE)
 \cite{gilbert1960capacity, elliott1963estimates}. It is a widely used stochastic
 model for describing bit error processes in transmission channels, where errors
 are correlated. There exits several parameterization of this model, but we will
@@ -118,6 +118,7 @@ Let $q(t)$ denote the state at time $t$, then the GE model is defined by the
 transition matrix $\boldsymbol{T}$
 
 \begin{equation}
+  \label{eq:GE_transition}
   \boldsymbol{T} = 
   \begin{bmatrix}
     1-f & f \\
@@ -125,9 +126,8 @@ transition matrix $\boldsymbol{T}$
   \end{bmatrix},
 \end{equation}
 \begin{align}
-  \label{eq:GE_transition}
-  f &= \Pr[q(t) = B \mid q(t-1) = G] \qquad \textrm{failure rate}, \\
-  r &= \Pr[q(t) = G \mid q(t-1) = B] \qquad \textrm{recovery rate},
+  f &= \Pr[q(t+1) = B \mid q(t) = G] \qquad \textrm{failure rate}, \\
+  r &= \Pr[q(t+1) = G \mid q(t) = B] \qquad \textrm{recovery rate},
 \end{align}
 
 where $f\in(0,1)$ and $r\in(0,1)$ are the transition probabilities between good
@@ -148,7 +148,7 @@ of time, in which the channel is in the good or the bad state. Thus, the
   \label{eq:avgLoss}
 \end{equation}
 
-\subsection*{Average Coherence Time}
+\subsection{Average Coherence Time}
 Another important characteristic defined by the GE model is the mean sojourn
 time, i.e., the average duration that the wireless channel stays in a state. In
 common NCS scenarios, packet transmissions occur in discrete time slots. Hence,
@@ -172,13 +172,14 @@ times}.
 
 \begin{table}[h]
   \begin{center}
-  \begin{tabular}{|p{3.5cm}|c|c|c|c|}
+  \begin{tabular}{|p{3.5cm}|c|>{\centering\arraybackslash}p{2.05cm}|c|>{\centering\arraybackslash}p{2.05cm}|}
   \hline 
-  & \multicolumn{2}{|c|}{\textbf{Time in Good}} &
-  \multicolumn{2}{|c|}{\textbf{Time in Bad}} \\
+  & \multicolumn{2}{|c|}{\textbf{Time slots in Good}} &
+  \multicolumn{2}{|c|}{\textbf{Time slots in Bad}} \\
   \hline
-  \textbf{Failure rate} $f$ / \textbf{Recovery rate} $r$ & \textbf{mean} & \textbf{std} & \textbf{mean}
-  & \textbf{std}\\
+  \textbf{Failure rate} $f$ / \textbf{Recovery rate} $r$ & \textbf{Mean} &
+  \textbf{Standard Deviation} & \textbf{Mean}
+  & \textbf{Standard Deviation}\\
   \hline \hline
   0.3 & 3.34 & 2.74 & 3.32 & 2.77 \\
   \hline 
@@ -189,10 +190,10 @@ times}.
   0.01 & 94.3 & 89.5 & 98.1 & 99.6 \\
   \hline 
   \end{tabular}
-  \caption[Measurement of average coherence time]{Measurement of average
-  coherence times for different transition probabilities. Note that the state
-  transition probabilities are chosen symmetrically for this measurement, i.e.
-  $f=r$}
+  \caption[Measurement of average coherence time in Gilbert-Elliot
+  channels]{Measurement of average coherence times for different transition
+  probabilities. Note that the state transition probabilities are chosen
+  symmetrically for this measurement, i.e. $f=r$}
   \label{tab:sojournTime}
 \end{center}
 \end{table}
