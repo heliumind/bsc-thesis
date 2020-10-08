@@ -3,30 +3,57 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 
-os = ['Mac', 'Linux', 'Windows']
+plt.rc('font', family='serif')
+sns.set_style('whitegrid', {'font.family':'serif'})
 
-fig1 = plt.figure()
-fig2 = plt.figure()
-sns.set_style('darkgrid')
+mTickSize = 18
+mLabelSize = 20
+mLegendSize = 20
 
-ax1 = fig1.add_subplot()
-ax2 = fig2.add_subplot()
+os = ['Linux', 'Mac', 'Windows']
 
-ax1.set_title(r"Normal distribution $\mathcal{N}(0.5, 0.2)$")
-ax2.set_title(r"Uniform distribution $\mathcal{U}(0, 1)$")
+def plot_uniform():
+    fig = plt.figure(figsize=(10,6))
+    ax = fig.add_subplot()
+    # ax.set_title(r"Uniform distribution $\mathcal{U}(0, 1)$")
 
-for folder in os:
+    for folder in os:
+        with open (f"{folder}/uniform_distribution.json") as f:
+            uni = np.array(json.load(f))
 
-    with open (f"{folder}/normal_distribution.json") as f: 
-        norm = np.array(json.load(f))
+        sns.distplot(uni, kde=False, label=folder, ax=ax)
 
-    with open (f"{folder}/uniform_distribution.json") as f:
-        uni = np.array(json.load(f))
+    ax.set_xlabel(r'$X$', fontsize=mLabelSize)
+    ax.set_ylabel('Counts', fontsize=mLabelSize)
+    for tick in ax.xaxis.get_major_ticks():
+        tick.label.set_fontsize(mTickSize)
+    for tick in ax.yaxis.get_major_ticks():
+        tick.label.set_fontsize(mTickSize)
 
-    sns.distplot(norm, label=folder, ax=ax1)
-    plt.savefig('normal.pdf')
-    sns.distplot(uni, label=folder, ax=ax2)
+    plt.legend(fontsize=mLegendSize, bbox_to_anchor=(0., 1.02, 1., .102), loc='lower left', ncol=3, mode="expand", borderaxespad=0.)
     plt.savefig('uniform.pdf')
 
-plt.legend()
+def plot_normal():
+    fig = plt.figure(figsize=(10,6))
+    ax = fig.add_subplot()
+    # ax.set_title(r"Normal distribution $\mathcal{N}(0.5, 0.2)$")
+
+    for folder in os:
+        with open (f"{folder}/normal_distribution.json") as f: 
+            norm = np.array(json.load(f))
+
+        sns.distplot(norm, kde=False, label=folder, ax=ax)
+        
+    ax.set_xlabel(r'$X$', fontsize=mLabelSize)
+    ax.set_ylabel('Counts', fontsize=mLabelSize)
+    for tick in ax.xaxis.get_major_ticks():
+        tick.label.set_fontsize(mTickSize)
+    for tick in ax.yaxis.get_major_ticks():
+        tick.label.set_fontsize(mTickSize)
+
+    plt.legend(fontsize=mLegendSize)
+    plt.savefig('normal.pdf')
+
+plot_uniform()
+plot_normal()
 plt.show()
