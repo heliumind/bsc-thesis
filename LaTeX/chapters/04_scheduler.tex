@@ -53,25 +53,35 @@ each level needed to take the shortest path.
 
 Fig.~(\ref{fig:FHStree}) depicts an example tree with $H=1$ and $N=2$. Notice,
 that for this example the optimal scheduling policy $\pi^*$ consists of only one
-scheduling decision $\mu^*(t) \in \left\{\varnothing, 1, 2 \right\}$ which
-determines the shortest path from Level 1 to 0 and achieves the optimal cost
-$J^*(\boldsymbol{s}(t))$ w.r.t. Eq.~\eqref{eq:horizoncost}:
+scheduling decision $\mu^*(t) \in \mathcal{M}(\boldsymbol{s}(t)) = \left\{
+\varnothing, 1, 2 \right\}$ which determines the shortest path from Level 1 to 0
+and achieves the optimal cost $J^*(\boldsymbol{s}(t))$ w.r.t.
+Eq.~\eqref{eq:horizoncost}:
 
 \begin{align*}
-  \mu^*(t) =& \argmin_{\mu(t)}{J(\boldsymbol{s}(t))}
-  = \argmin_{\mu(t)}{\E \left[ \sum_{t' = t }^{t + 1} C(\boldsymbol{s}(t')) \right]} \\
-  =& \left\{
-  \underbrace{\Pr[0|\varnothing] \cdot C(\boldsymbol{s}_3)}_{\mu(t)=\varnothing}, \,
-  \underbrace{\Pr[1|1] \cdot C(\boldsymbol{s}_1) + \Pr[0|1] \cdot C(\boldsymbol{s}_3)}_{\mu(t)=1}, \,
-  \underbrace{\Pr[1|2] \cdot C(\boldsymbol{s}_2) + \Pr[0|2] \cdot C(\boldsymbol{s}_3)}_{\mu(t)=2} 
-  \right\}
+    \mu^*(t) =& \argmin_{\mu(t)\in\mathcal{M}(\boldsymbol{s}(t))}{J(\boldsymbol{s}(t))}
+    = \argmin_{\mu(t)\in\mathcal{M}(\boldsymbol{s}(t))}{\E \left[ \sum_{t' = t }^{t + 1} C(\boldsymbol{s}(t')) \right]} \\
+    =& \argmin_{\mu(t)\in\mathcal{M}(\boldsymbol{s}(t))}{} \left\{
+      \underbrace{\Pr[0|\varnothing] C(\boldsymbol{s}_3)}_{\mu(t)=\varnothing}, \,
+      \underbrace{\Pr[1|1] C(\boldsymbol{s}_1) + \Pr[0|1] C(\boldsymbol{s}_3)}_{\mu(t)=1}, \,
+      \underbrace{\Pr[1|2] C(\boldsymbol{s}_2) + \Pr[0|2] C(\boldsymbol{s}_3)}_{\mu(t)=2} \right\}
 \end{align*}
 
+% \begin{equation*}
+%   \begin{split}
+%     \mu^*(t) = \argmin_{\mu(t)}{J(\boldsymbol{s}(t))}
+%     = \argmin_{\mu(t)}{\E \left[ \sum_{t' = t }^{t + 1} C(\boldsymbol{s}(t')) \right]}
+%     = \argmin_{\mu(t)}{}\left\{
+%       \underbrace{\Pr[0|\varnothing] \cdot C(\boldsymbol{s}_3)}_{\mu(t)=\varnothing},\right. \\
+%       \left. \underbrace{\Pr[1|1] \cdot C(\boldsymbol{s}_1) + \Pr[0|1] \cdot C(\boldsymbol{s}_3)}_{\mu(t)=1}, \,
+%       \underbrace{\Pr[1|2] \cdot C(\boldsymbol{s}_2) + \Pr[0|2] \cdot C(\boldsymbol{s}_3)}_{\mu(t)=2} \right\}
+%   \end{split}
+% \end{equation*}
 
 \begin{figure}[htb]
 	\centering
-	\resizebox{.8\columnwidth}{!}{\input{figures/fhs_treeexample}}
-  \caption[Example tree structure for FHS with 2 sub-systems and Finite Horizon
+  \resizebox{.8\columnwidth}{!}{\input{figures/fhs_treeexample}} 
+  \caption[FHS: Example tree structure with 2 sub-systems and finite horizon
   1]{Example $1$ level tree structure with $2$ sub-systems, i.e., $H=1$ and
   $N=2$. Each edge is labeled with the corresponding transition probability,
   i.e., $\Pr{[\gamma_{\mu(t)}(t)\mid \mu(t)]}$ as the conditional probability
@@ -130,7 +140,7 @@ communication links. Thus, $2^N$ different GE channel transitions are possible
 in the following time slot $t'+1$. Further, for each of these $2^N$ channel
 states $\boldsymbol{q}(t'+1)$, $N+1$ network outcomes due to packet transmission
 are possible, which correspond to $N$ successful transmissions for each link and
-a common failed state. Compared to the FHS, each node in such a tree has $2^N$
+one common failed state. Compared to the FHS, each node in such a tree has $2^N$
 times more child nodes. Fig.~(\ref{fig:GEStree}) shows a minimal tree for $N=2$,
 $H=1$ and initial state $\boldsymbol{s}(t)=\left[t\quad t\quad a\quad b\quad
 c\quad d\quad G\quad G \right]^T$.
@@ -159,17 +169,18 @@ the GE channel-aware FH scheduler can be summarized in the following steps:
 \begin{sidewaysfigure}
 	\centering
   \input{figures/ges_treeexample} 
-  \caption[Example tree structure for GES with 2 sub-systems and Finite Horizon
+  \caption[GES: Example tree structure with 2 sub-systems and finite horizon
   1]{Example $1$ level tree structure in a GE channel with $2$ sub-systems,
   i.e., $H=1$ and $N=2$. An initial state $\boldsymbol{s}(t)=\left[t\quad t\quad
   a\quad b\quad c\quad d\quad G\quad G \right]^T$ is assumed. $\boldsymbol{q}_
   {1\dots 4}$ resemble the $2^N=4$ possible GE channel states, each labeled with
-  the corresponding transition probability. Each of these intermediate nodes
-  form the root of the tree shown in Fig.~(\ref{fig:FHStree}). In these
-  $\Pr[\gamma_{\mu(t)}(t)\mid \mu(t)]$ stands for the conditional probability
-  for the possible next network state to occur given the scheduling decision.
-  For each $\boldsymbol{q}_{1\dots 4}$, the first two child nodes correspond to
-  the success state while the third child node is the shared failed state.}
+  the corresponding transition probability, i.e., $\prod_{i=1}^{N}{\Pr[q_i(t+1)
+  = G|q_i(t)=G]}$. Each of these intermediate nodes form the root of the tree
+  shown in Fig.~(\ref{fig:FHStree}). In these $\Pr[\gamma_{\mu(t)}(t)\mid
+  \mu(t)]$ stands for the conditional probability for the possible next network
+  state to occur given the scheduling decision. For each $\boldsymbol{q}_{1\dots
+  4}$, the first two child nodes correspond to the success state while the third
+  child node is the shared failed state.}
 	\label{fig:GEStree}
 \end{sidewaysfigure}
 
@@ -198,7 +209,7 @@ Applied to our tree with $m=2^N(N+1)$ and $h=H$:
 Depending on how often each node is visited in the concrete implementation, the
 complexity becomes $c \cdot n$, where $c$ is a positive constant. However, in
 simplified Big-O notation, $c$ can be omitted and the complexity is given as
-$\mathcal{O}(2^N)$. This corresponds to a brute-force search for the shortest
+$\mathcal{O}(2^N\cdot N^H)$. This corresponds to a brute-force search for the shortest
 path in our constructed tree. The amount of nodes and complexity can be reduced
 by increasing the sampling period. As packets are only generated at sampling
 events, if a sub-systems succeeds to transmit its plant measurement from that

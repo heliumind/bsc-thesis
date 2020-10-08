@@ -33,10 +33,6 @@
 % Include Graphic-files:
 \usepackage{graphicx}
 \graphicspath{ {./figures/} }
-% Include .eps-files (needed also for the LKN-logo):
-\usepackage[outdir=./figures/]{epstopdf}
-\epstopdfDeclareGraphicsRule{.pdf}{png}{.png}{convert #1 \OutputFile}
-\DeclareGraphicsExtensions{.png,.pdf}
 % Special \LaTex symbols (e.g. \BibTeX):
 \usepackage{doc}
 % Include doc++ generated tex-files:
@@ -44,6 +40,8 @@
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{array}
 \usepackage{rotating}
+\usepackage{caption}
+\usepackage{subcaption}
 \usepackage{tikz}
 \usetikzlibrary{automata, positioning, shapes, arrows}
 % Include PDF links

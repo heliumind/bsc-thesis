@@ -9,7 +9,8 @@
 
 In this chapter, we first present related work on scheduling in NCS scenarios in
 Section~(\ref{sec:survey}). Afterwards, we give a short introduction to the
-Gilbert-Elliot Channel Model in Section.~(\ref{sec:GE}). 
+Gilbert-Elliot Channel Model, its interpretation and statistical properties in
+Section.~(\ref{sec:GE}). 
 
 \section{Related Work} \label{sec:survey}
 
@@ -109,13 +110,13 @@ is a two-state homogenous Markov chain where each of the two states corresponds
 to high or low channel quality and is called good state $G$ or bad state $B$,
 respectively. Each of them may generate errors as independent events at a state
 dependent error rate $p_G$ in the good and $p_B$ in the bad state. As shown in
-\cite{hasslinger2008gilbert}, in order to apply the GE model in data loss
+\cite{hasslinger2008gilbert}, in order to apply the GE model in packet loss
 processes, we consider the packet reception process as a sequence of bits: 0
 stands for a successful arrival of a packet whereas 1 denotes a lost or
 corrupted packet.
 
 Let $q(t)$ denote the state at time $t$, then the GE model is defined by the
-transition matrix $\boldsymbol{T}$
+stochastic transition matrix $\boldsymbol{T}$:
 
 \begin{equation}
   \label{eq:GE_transition}
@@ -140,15 +141,15 @@ be defined as follows:
 \end{equation}
 
 The stationary state probabilities can be interpreted as the average percentage
-of time, in which the channel is in the good or the bad state. Thus, the
-\textit{average error probability} is obtained as:
+of time, in which the channel is in $G$ or $B$. Thus, the \textit{average error
+probability} is obtained as:
 
 \begin{equation}
   p_E = \pi_G p_G + \pi_B p_B
   \label{eq:avgLoss}
 \end{equation}
 
-\subsection{Average Coherence Time}
+\subsection{Mean Sojourn Time}
 Another important characteristic defined by the GE model is the mean sojourn
 time, i.e., the average duration that the wireless channel stays in a state. In
 common NCS scenarios, packet transmissions occur in discrete time slots. Hence,
@@ -166,32 +167,27 @@ statistical properties of a geometric distribution and confirms our mapping of
 state transition probabilities to their corresponding mean sojourn time. Note
 that both $f$ and $r$ control the ``burstiness'' of the modeled channel. For
 instance, the smaller $r$ is, the longer the channel will stay in the bad state
-on average. Hence, longer burst errors are to be expected. Throughout the rest
-of the thesis, we will refer $T_G$ and $T_B$ as \textit{average coherence
-times}.
+on average. Hence, longer burst errors are to be expected. 
 
 \begin{table}[h]
   \begin{center}
   \begin{tabular}{|p{3.5cm}|c|>{\centering\arraybackslash}p{2.05cm}|c|>{\centering\arraybackslash}p{2.05cm}|}
   \hline 
-  & \multicolumn{2}{|c|}{\textbf{Time slots in Good}} &
-  \multicolumn{2}{|c|}{\textbf{Time slots in Bad}} \\
+  & \multicolumn{2}{c|}{\textbf{Time slots in Good}} &
+  \multicolumn{2}{c|}{\textbf{Time slots in Bad}} \\
   \hline
   \textbf{Failure rate} $f$ / \textbf{Recovery rate} $r$ & \textbf{Mean} &
   \textbf{Standard Deviation} & \textbf{Mean}
   & \textbf{Standard Deviation}\\
   \hline \hline
   0.3 & 3.34 & 2.74 & 3.32 & 2.77 \\
-  \hline 
   0.1 & 10.0 & 9.56 & 10.0 & 9.29 \\
-  \hline 
   0.03 & 33.4 & 32.6 & 34.1 & 34.1 \\
-  \hline 
   0.01 & 94.3 & 89.5 & 98.1 & 99.6 \\
   \hline 
   \end{tabular}
-  \caption[Measurement of average coherence time in Gilbert-Elliot
-  channels]{Measurement of average coherence times for different transition
+  \caption[Measurement of mean sojourn time in Gilbert-Elliot
+  channels]{Measurement of mean sojourn times for different transition
   probabilities. Note that the state transition probabilities are chosen
   symmetrically for this measurement, i.e. $f=r$}
   \label{tab:sojournTime}

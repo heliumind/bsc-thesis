@@ -26,7 +26,7 @@
 \node (s11) at (7.5,\levelOneSize) [draw, circle, align=center, inner sep=0pt, minimum size=1cm] {\scriptsize$\boldsymbol{s}_{11}(t+1)$};
 \node (s12) at (9,\levelOneSize) [draw, circle, align=center, inner sep=0pt, minimum size=1cm] {\scriptsize$\boldsymbol{s}_{12}(t+1)$};
 
-\path[->] (s0) edge node [sloped, above] {\scriptsize$\Pr[q(t)=G|q(t+1)=G]\cdot \Pr[G|G]$} (q1);
+\draw[->] (s0) to node[sloped, above] {\scriptsize$\Pr[q_1(t+1)=G|q_1(t)=G]\cdot$} node[sloped, below] {\scriptsize$\Pr[q_2(t+1)=G| q_2(t)=G$} (q1);
 \path[->] (s0) edge node [sloped, above] {\scriptsize$\Pr[G|G]\cdot \Pr[B|G]$} (q2);
 \path[->] (s0) edge node [sloped, above] {\scriptsize$\Pr[B|G]\cdot \Pr[G|G]$} (q3);
 \path[->] (s0) edge node [sloped, above] {\scriptsize$\Pr[B|G]\cdot \Pr[B|G]$} (q4);

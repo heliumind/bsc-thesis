@@ -40,10 +40,10 @@ the QoC requirements of heterogeneous NCS applications. Hence, new cross-layer
 metrics are needed in control-aware communication protocol design.
 Age-of-Information (AoI) is such a relatively new metric that measures the
 information freshness at the receiver monitoring a remote process
-\cite{kaul2012real} and used as cross-layer metric in wireless medium access
-protocol design. It is defined as the time elapsed since the generation of the
-latest received information. As the name implies, AoI increases linearly in time
-for all types of applications and drops upon receiving a new update. AoI
+\cite{kaul2012real} and is used as a cross-layer metric in wireless medium
+access protocol design. It is defined as the time elapsed since the generation
+of the latest received information. As the name implies, AoI increases linearly
+in time for all types of applications and drops upon receiving a new update. AoI
 combines packet generation frequency, end-to-end delay, and packet loss in a
 single metric. For instance, the absence of information increases AoI on the
 controller side regardless of its cause: high delay, packet loss, or a low
@@ -59,7 +59,7 @@ calculate control system metrics.
 % the underlying control loops impose challenges for both communication and
 % control. 
 
-\section*{Contributions and Outline}
+\section*{Problem Statement}
 In this work, we aim to develop an optimal scheduling policy addressing a
 centralized wireless resource scheduling problem for NCS. We consider multiple
 heterogenous feedback control loops sharing a wireless link with time-varying
@@ -71,7 +71,7 @@ expected cost minimization. For a similar scenario, \cite{ayan2020aoi} has
 proposed an online, centralized scheduling policy that is age-penalty optimal
 for a finite horizon $H$. However, similar to most existing works, this solution
 assumes a channel with independent and identically distributed (i.i.d) packet
-drop. Wireless channels on the other hand are known to generate burst packet
+loss. Wireless channels on the other hand are known to generate burst packet
 losses/errors, meaning in reality packet losses tend to be correlated. One
 simple model capturing correlated losses found in wireless fading channels is
 the Gilbert-Elliot Model. We aim to extend the state-of-the-art by combining our
