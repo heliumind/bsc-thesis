@@ -10,7 +10,7 @@ import scipy.stats
 
 plt.rc('font', family='serif')
 
-H = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] 
+H = [1, 2, 3, 4]
 N = 3
 mMarkerSize = 10
 mTickSize = 20
@@ -18,8 +18,8 @@ mLabelSize = 20
 mLineWidth = 3
 mLegendSize = 20
 
-prefix = 'FHS1_'
-folderName = '../results/GEPerformance/FHS/CoherenceTime_3/'
+prefix = 'GES2_'
+folderName = '../results/GEPerformance/GES/CoherenceTime_10/'
 
 
 def mean_confidence_interval(data, confidence=0.95):
@@ -431,13 +431,13 @@ def plot_complexity_against_H(H):
 
 # plot_nie_against_H(H)
 
-# plot_J_against_H(H)
+plot_J_against_H(H)
 
 # plot_complexity_against_H(H)
 
-# plot_aoi_against_H_separate(H)
+plot_aoi_against_H_separate(H)
 
-# plot_nie_against_H_separate(H)
+plot_nie_against_H_separate(H)
 
 # plot_nie_against_H_separate_boxplot(H)
 

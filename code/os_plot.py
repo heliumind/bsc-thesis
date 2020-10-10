@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import scipy.stats
 
 plt.rc('font', family='serif')
+plt.rcParams['figure.constrained_layout.use'] = True
 
 H = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 N = 3
@@ -155,8 +156,8 @@ def plot_complexity_against_H(H):
         err.clear()
 
     worstcase_against_H = [((N + 1) ** (h + 1) - 1) / N for h in H]
-    ax.plot(H[:], worstcase_against_H, linestyle='solid', linewidth=mLineWidth, c='lightblue',
-                label='worst-case', marker='*', markerfacecolor='None', markersize=mMarkerSize)
+    # ax.plot(H[:], worstcase_against_H, linestyle='solid', linewidth=mLineWidth, c='lightblue',
+#                label='worst-case', marker='*', markerfacecolor='None', markersize=mMarkerSize)
 
     ax.set_xlabel('Horizon', fontsize=mLabelSize)
     ax.set_ylabel('Complexity', fontsize=mLabelSize)

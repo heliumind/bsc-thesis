@@ -4,9 +4,11 @@ import seaborn as sns
 import numpy as np
 
 plt.rc('font', family='serif')
+plt.rcParams['figure.constrained_layout.use'] = True
+
 sns.set_style('whitegrid', {'font.family':'serif'})
 
-mTickSize = 18
+mTickSize = 20
 mLabelSize = 20
 mLegendSize = 20
 
@@ -44,7 +46,7 @@ def plot_normal():
 
         sns.distplot(norm, kde=False, label=folder, ax=ax)
         
-    ax.set_xlabel(r'$X$', fontsize=mLabelSize)
+    ax.set_xlabel(r'$Y$', fontsize=mLabelSize)
     ax.set_ylabel('Counts', fontsize=mLabelSize)
     for tick in ax.xaxis.get_major_ticks():
         tick.label.set_fontsize(mTickSize)
