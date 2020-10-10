@@ -1,26 +1,16 @@
 \chapter{Scenario and Problem Statement}
 
 In this chapter, we introduce the considered scenario and give details on the
-system, network and control models assumed in Sec.~(\ref{sec:system}),
-Sec.~(\ref{sec:network}) and Sec.~(\ref{sec:control}) respectively.
-Section~(\ref{sec:problem}) formulates the wireless resource scheduling problem
-as an optimal control problem to be solved by the proposed scheduling scheme.
+system, network and control models assumed in Sec.~\ref{sec:system},
+Sec.~\ref{sec:network} and Sec.~\ref{sec:control} respectively.
+Section~\ref{sec:problem} formulates the wireless resource scheduling problem as
+an optimal control problem to be solved by the proposed scheduling scheme.
 
-\section{System Model} \label{sec:system}
-We consider $N$ independent, linear time-invariant (LTI) control systems sharing
-a wireless communication network. Each individual sub-system $i$ consists of a
-plant $\plant$, a sensor $\sensor$, and a controller $\controller$ with an
-estimator $\estimator$. Every sensor $\sensor$ measures the output of the plant
-periodically and sends the latest sample to $\controller$. On the controller
-side, $\estimator$ estimates the current plant state based on the latest
-received information. Estimated state is then used by $\controller$ to calculate
-the next control input. Each controller-plant pair is assumed to be co-located,
-while the sensor is operating remotely over the shared wireless channel as
-illustrated in Fig.~(\ref{fig:scenario}).
+\section{System Model} \label{sec:system} 
 
 \begin{figure}[htb]
   \centering
-  \resizebox*{.8\columnwidth}{!}{\input{figures/scenario}} \caption[Scheme of
+  \resizebox*{.8\textwidth}{!}{\input{figures/scenario}} \caption[Scheme of
   $N$ sub-systems sharing a wireless communication medium]{Considered scenario
   with $N$ heterogenous LTI networked control systems. Solid lines indicate
   ideal controller-to-plant and plant-to-sensor links. Sensor-to-controller link
@@ -30,7 +20,19 @@ illustrated in Fig.~(\ref{fig:scenario}).
   \label{fig:scenario}
 \end{figure}
 
-\section{Network Model} \label{sec:network}
+We consider $N$ independent, linear time-invariant (LTI) control systems sharing
+a wireless communication network. Each individual sub-system $i$ consists of a
+plant $\plant$, a sensor $\sensor$, and a controller $\controller$ with an
+estimator $\estimator$. Every sensor $\sensor$ measures the output of the plant
+periodically and sends the latest sample to $\controller$. On the controller
+side, $\estimator$ estimates the current plant state based on the latest
+received information. Estimated state is then used by $\controller$ to calculate
+the next control input. Each controller-plant pair is assumed to be co-located,
+while the sensor is operating remotely over the shared wireless channel as
+illustrated in Fig.~\ref{fig:scenario}.
+
+\section{Network Model} \label{sec:network} 
+
 Time is divided into discrete slots which are also the smallest time unit in our
 scenario. We use $t \in \mathbb{N}$ to index time slots. Sensors $\sensor$
 transmit state information over a wireless medium in packets containing a single
@@ -40,8 +42,8 @@ same slot. Medium access is granted by a centralized entity called
 which sub-system is allowed to transmit its latest packet. Moreover, only a
 single transmission resource is allocated within a single time slot. Suppose a
 scheduler decision variable $\delta_i(t) \in \left\{0,1\right\}$ that takes the
-value of 1 if sub-system $i$ is scheduled for transmission in slot $t$.
-Then, the following holds for all time slots:
+value of 1 if sub-system $i$ is scheduled for transmission in slot $t$. Then,
+the following holds for all time slots:
 
 \begin{equation}
   \sum_{i=1}^{N}{\delta_i(t) \leq 1 \quad, \forall t}
@@ -80,6 +82,19 @@ As $t_{i,o}$ is an uniformly distributed random variable and not necessarily
 equal for each sub-system, we allow sampling to operate in a non-synchronized
 fashion. 
 
+\begin{figure}[htb]
+  \centering
+  \resizebox*{.5\textwidth}{!}{\input{figures/ageplot}} 
+  \caption[Example evolution of generation time $t_{i,g}$, received time
+  $t_{i,r}$ and update time $t_{i,g}$]{Evolution of generation time
+  $t_{i,g}(t)$, received time $t_{i,r}(t)$ and the update time $t_{i,g}(t)$
+  depicted in y-axis versus time in x-axis. $t_{i,g}(t)$ and $t_{i,u}(t)$ are
+  updated periodically with $D_i$ slots, while $t_{i,r}(t)$ can be updated
+  asynchronously. On x-axis with $\delta_i(t_{1,2})=1$ two cases of successful
+  packet transmission for sub-system $i$ are depicted.}
+  \label{fig:ageplot}
+\end{figure}  
+
 Having received an update, the controller does not benefit from receiving an
 older plant measurement \cite{costa2016age}. Older packets are considered to be
 ``non-informative'' and obsolete. Therefore, sensors replace their packet in the
@@ -108,25 +123,12 @@ received by $\controller$ until time $t$:
   \end{cases}
 \end{equation}
 
-Fig.~(\ref{fig:ageplot}) shows an exemplary evolution of $t_{i,g}$, along with
-the relationship between ${t_{i,r}(t+1)}$ and $t_{i,g}(t)$ after two successful
+Fig.~\ref{fig:ageplot} shows an exemplary evolution of $t_{i,g}$, along with the
+relationship between ${t_{i,r}(t+1)}$ and $t_{i,g}(t)$ after two successful
 updates. Generation time $t_{i,g}$ demonstrates a discrete staircase behavior at
 $t \in \mathcal{G}_i$, while received time $t_{i,r}$ can take new values at any
 slot $t \in \mathbb{N}$ subject to the indication variables $\delta_i$ and
 $\gamma_i$.
-
-\begin{figure}[htb]
-  \centering
-  \resizebox*{.6\columnwidth}{!}{\input{figures/ageplot}} 
-  \caption[Example evolution of generation time $t_{i,g}$, received time
-  $t_{i,r}$ and update time $t_{i,g}$]{Evolution of generation time
-  $t_{i,g}(t)$, received time $t_{i,r}(t)$ and the update time $t_{i,g}(t)$
-  depicted in y-axis versus time in x-axis. $t_{i,g}(t)$ and $t_{i,u}(t)$ are
-  updated periodically with $D_i$ slots, while $t_{i,r}(t)$ can be updated
-  asynchronously. On x-axis with $\delta_i(t_{1,2})=1$ two cases of successful
-  packet transmission for sub-system $i$ are depicted.}
-  \label{fig:ageplot}
-\end{figure}  
 
 \section{Control Model} \label{sec:control}
 

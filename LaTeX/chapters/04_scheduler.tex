@@ -51,11 +51,11 @@ cost means finding the shortest path in the described tree. The optimal
 scheduling policy is then constructed from the scheduling decisions taken at
 each level needed to take the shortest path.
 
-Fig.~(\ref{fig:FHStree}) depicts an example tree with $H=1$ and $N=2$. Notice,
+Fig.~\ref{fig:FHStree} depicts an example tree with $H=1$ and $N=2$. Notice,
 that for this example the optimal scheduling policy $\pi^*$ consists of only one
-scheduling decision $\mu^*(t) \in \mathcal{M}(\boldsymbol{s}(t)) = \left\{
-\varnothing, 1, 2 \right\}$ which determines the shortest path from Level 1 to 0
-and achieves the optimal cost $J^*(\boldsymbol{s}(t))$ w.r.t.
+scheduling decision $\mu^*(t) \in \mathcal{M}(\boldsymbol{s}(t)) =
+\left\{\varnothing, 1, 2 \right\}$ which determines the shortest path from Level
+1 to 0 and achieves the optimal cost $J^*(\boldsymbol{s}(t))$ w.r.t.
 Eq.~\eqref{eq:horizoncost}:
 
 \begin{align*}
@@ -98,7 +98,7 @@ Eq.~\eqref{eq:horizoncost}:
 We extend the introduced FHS with a \textit{Gilbert-Elliot channel-aware
 Scheduler (GES)}, that takes channel state transitions for each link into
 consideration. Similarly, GES utilizes the DP algorithm in order to solve the
-$H$-stage problem. Namely, starting at state $\boldsymbol{s}(t)$ and time $t$,
+$H$-stage problem. Namely starting at state $\boldsymbol{s}(t)$ and time $t$,
 the optimal final horizon cost $J^*(\boldsymbol{s}(t))$ is given by the last
 step of the following algorithm:
 

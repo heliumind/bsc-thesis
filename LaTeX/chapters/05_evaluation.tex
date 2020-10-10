@@ -3,10 +3,10 @@
 In this chapter, we implement FHS and GES into a centralized wireless resource
 scheduling problem with underlying GE channel and evaluate the behavior as well
 as the performance of our proposed methods in simulations. To provide an
-appropriate comparison, in Sec.~(\ref{sec:setup}) we describe our choices for
+appropriate comparison, in Sec.~\ref{sec:setup} we describe our choices for
 our simulation environment and introduce three testing scenarios with different
 network configurations. Finally, we present and discuss the results of different
-simulations in Sec.~(\ref{sec:results}). 
+simulations in Sec.~\ref{sec:results}. 
 
 \section{Simulation Setup} \label{sec:setup}
 % Details regarding implementation and/or simulation are given in this chapter.
@@ -52,26 +52,28 @@ corresponds to deadbeat control strategy.
   \hline
   \end{tabular}
   \end{center}
-  \caption{Evaluation scenarios and their Gilbert-Elliot channel parametrization and statistical properties}
+  \caption{Summary of evaluation scenarios and their Gilbert-Elliot channel parametrization}
   \label{tab:scenarios}
 \end{table}
 
-Table~(\ref{tab:scenarios}) depicts the 3 chosen scenarios and their respective
-GE channel parametrization, where the channel conditions are getting worse from
-set to set. Scenario 1 and 2 resemble balanced GE channels, where on average
-half of the packet transmitted are lost. Further, due to symmetrical state
-transition probabilities, the channel will be in good and bad states 50\% of the
-simulation time each. $f$ and $r$ merely differ in absolute values, making the
-second channel prone to longer burst errors. To evaluate scheduler performance
-in a real-life scenario, we have adopted the third GE parameters from
-experiments conducted in \cite{frohn2011analyzing}. Here, measurements are
-obtained from an indoor wireless testbed based on the IEEE 802.11n standard.
-Obtained network trace is then used to find analytical GE parameters using the
-\textit{Baum-Welch algorithm} \cite{baum1970maximization}. \\ 
+Table~\ref{tab:scenarios} depicts the 3 chosen scenarios and their respective GE
+channel parametrization. Scenario 1 and 2 resemble challenging GE channels,
+where on average half of the packet transmitted are lost. Further, due to
+symmetrical state transition probabilities, the channel will be in good and bad
+states 50\% of the simulation time on average each. $f$ and $r$ merely differ in
+absolute values, making the second channel prone to longer burst errors. To
+evaluate scheduler performance in a real-life scenario, we have adopted the GE
+parameters for scenario 3 from experiments conducted in
+\cite{frohn2011analyzing}. Here, measurements are obtained from an indoor
+wireless testbed based on the IEEE 802.11n standard. Obtained network trace is
+then used to find analytical GE parameters using the \textit{Baum-Welch
+algorithm} \cite{baum1970maximization}. Compared to the first two settings,
+scenario 3 provides a good channel with significantly lower average loss
+probabilities and stays in the good state for the majority of time. \\ 
 For each scenario we vary the finite Horizon $H=\left\{ 1, \cdots, 10\right\}$
 for FHS and $H=\left\{ 1, \cdots, 4\right\}$ for GES to study its effect on AoI
-and remote estimation performance. Each configuration is simulated for a
-duration of $D=20000$ time slots and repeated $R=200$ times.
+and MSE. Each configuration is simulated for a duration of $D=20000$ time slots
+and repeated $R=200$ times.
 
 \subsection{Performance Metrics} 
 
@@ -92,9 +94,10 @@ network given by:
 \end{equation*}
 
 MSE indicates the deviation of the estimated state from its true state, hence,
-quantifying estimation accuracy of estimator $\estimator$. In the same fashion,
-we measure information freshness at $\estimator$ through measuring average AoI
-in the network as follows:
+quantifying estimation accuracy of estimator $\estimator$ as well as the
+uncertainty in the controlled process. In the same fashion, we measure
+information staleness at $\estimator$ by means of individual and total average
+AoI as follows:
 
 \begin{align*}
   \Delta_i &= \dfrac{1}{D} \sum_{t=1}^{D}{\Delta_i(t)}, \\
@@ -129,6 +132,16 @@ in the network as follows:
      \label{fig:MSEavg}
 \end{figure}
 
+Fig.~\ref{fig:MSEavg} depicts the estimation performance achieved by FH
+scheduler for varying $H$. We observe a drastic reduction of $\overline{MSE}$ as
+we increase the horizon from $H=1$ to $H=2$. However, beyond $H=2$, as the
+scheduler gets more farsighted, the performance gain diminishes. It is important
+to mention that for higher $H$ values, the averages of individual sub-systems,
+in other words the $MSE_i$ lines, tend to meet. This effect follows from equal
+weighting of MSE among sub-systems while obtaining the cost in
+Eq.~\eqref{eq:gfunction} which in turn leads to equal long-term averages as the
+scheduling actions become more ``long-term optimal''. 
+
 \begin{figure}[htbp]
   \centering
   \begin{subfigure}[b]{0.49\textwidth}
@@ -147,8 +160,21 @@ in the network as follows:
      \label{fig:networkshare}
 \end{figure}
 
-
 \subsection{Age-of-Information Performance}
+
+Fig.~\ref{fig:AoIseperate} illustrates the resulting AoI performance. As we can
+see, the average AoI differs for each sub-system. This is an expected result,
+since the FH aims to minimize the short-term MSE trajectory, regardless of how
+often any loop is granted medium access. This leads to unequal distribution of
+resources due to their heterogeneous system dynamics, thus to different update
+frequencies. In particular, we can see that the most critical sub-system with
+$A_i = 1.5$ is scheduled in average more frequently, because in our scenario a
+lower AoI indicates a more frequent update rate. Additionally, we observe a
+reduction in $\Delta_2$ and $\Delta_3$ as $H$ increases. This effect results
+from the increasing foresight of the scheduler for possible high future costs in
+case of consecutive unsuccessful transmissions. Note that, although $\Delta_3$
+is the lowest among all $\Delta_i$, sub-system $3$ is still the one with the
+highest MSE in the network.
 
 \begin{figure}[htbp]
   \centering
@@ -174,14 +200,13 @@ in the network as follows:
 
 \subsection{Age-of-Information Distribution}
 
-\begin{figure}[htbp]
+\begin{figure}[htb]
   \centering
   \begin{subfigure}[b]{0.49\textwidth}
       \centering
       \includegraphics[width=\textwidth]{AoI_Histogram_N3}
-      \caption{Scenario 1 with FHS}
+      \caption{} 
   \end{subfigure}
-  \hfill
   \begin{subfigure}[b]{0.49\textwidth}
       \centering
       \includegraphics[width=\textwidth]{AoI_Histogram_N3_WC}
@@ -202,3 +227,27 @@ in the network as follows:
 \end{figure}
 
 \subsection{Complexity Analysis}
+From Fig.~\ref{fig:networkshare} it is evident that the FH scheduler modifies
+the distribution of network resources among sub-systems as a different $H$ is
+selected. On the other hand, Fig.~\ref{fig:MSEavg} shows that the additional
+performance gain it brings in terms of cost is not as obvious as the induced
+complexity, which grows exponentially with $H$. The effect of increasing
+complexity is given in table below which compares the average number of nodes in
+the root tree during simulations (FH) to the worst-case bound without any search
+space reduction: 
+
+\begin{center}
+	\begin{tabular}{ c | c |c | c | c}
+		$H$ & 1 & 5 & 9 & 12 \\ 
+		\hline
+		FH & $4.6$ & $5.9\cdot10^2$ & $5.7\cdot10^4$ & $1.8\cdot10^6$ \\		
+		WC & $5.0$ & $1.4\cdot10^3$ & $3.5\cdot10^5$& $2.2\cdot10^7$ \\ 
+	\end{tabular}
+\end{center}
+
+We observe a complexity reduction up to approximately $91\%$ in our
+implementation compared to the worst-case scenario with $\frac{(N + 1)^{H+1} -
+1}{N}$ nodes. This effect is caused by constraining the action set as in
+Eq.~\eqref{eq:admissibleactions} and narrowing down our search space within the
+class of admissible scheduling policies.
+
