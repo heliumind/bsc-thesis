@@ -10,19 +10,19 @@ an optimal control problem to be solved by the proposed scheduling scheme.
 
 \begin{figure}[htb]
   \centering
-  \resizebox*{.8\textwidth}{!}{\input{figures/scenario}} \caption[Scheme of
-  $N$ sub-systems sharing a wireless communication medium]{Considered scenario
-  with $N$ heterogenous LTI networked control systems. Solid lines indicate
-  ideal controller-to-plant and plant-to-sensor links. Sensor-to-controller link
-  is closed over a shared wireless channel. Medium access is granted centrally
-  by a scheduler. Note that $k_i$ refers to the sampling period a sub-system $i$
-  is in.}
+  \resizebox*{.8\textwidth}{!}{\input{figures/scenario}} 
+  \caption[Scheme of $N$ sub-systems sharing a wireless communication
+  medium]{Considered scenario with $N$ heterogeneous LTI networked control
+  systems. Solid lines indicate ideal controller-to-plant and plant-to-sensor
+  links. Sensor-to-controller links are closed over a shared wireless channel.
+  Medium access is granted centrally by a scheduler. Note that $k_i$ refers to
+  the sampling period a sub-system $i$ is in.}
   \label{fig:scenario}
 \end{figure}
 
 We consider $N$ independent, linear time-invariant (LTI) control systems sharing
 a wireless communication network. Each individual sub-system $i$ consists of a
-plant $\plant$, a sensor $\sensor$, and a controller $\controller$ with an
+plant $\plant$, a sensor $\sensor$ and a controller $\controller$ with an
 estimator $\estimator$. Every sensor $\sensor$ measures the output of the plant
 periodically and sends the latest sample to $\controller$. On the controller
 side, $\estimator$ estimates the current plant state based on the latest
@@ -36,8 +36,8 @@ illustrated in Fig.~\ref{fig:scenario}.
 Time is divided into discrete slots which are also the smallest time unit in our
 scenario. We use $t \in \mathbb{N}$ to index time slots. Sensors $\sensor$
 transmit state information over a wireless medium in packets containing a single
-measurement. Each packet transmission starting in a slot $t$ ends within the
-same slot. Medium access is granted by a centralized entity called
+measurement. Each packet transmission starting in a slot $t$ is assumed to end
+within the same slot. Medium access is granted by a centralized entity called
 \textit{scheduler}. That means, in each time slot $t$, the scheduler decides
 which sub-system is allowed to transmit its latest packet. Moreover, only a
 single transmission resource is allocated within a single time slot. Suppose a
@@ -55,12 +55,12 @@ Sec.~{\ref{sec:GE}}) Each link is prone to its own channel state $q(t)$ which
 affects successful packet reception. A packet transmitted at $t$ is lost with
 probability $p_i(t) \in \left\{p_G,p_B\right\}$ or received successfully with
 probability $1-p_i(t)$. Given that $\sensor$ is scheduled, let $\gamma_i(t)=1$
-indicate a successful transmission with probability $\Pr[\gamma_i[t]=1 \mid
+indicate a successful transmission with probability $\Pr[\gamma_i(t)=1 \mid
 \delta_i(t)=1] = 1-p_i(t)$ and $\gamma_i(t)=0$ a failed transmission with
 probability $\Pr[\gamma_i(t)=0 \mid \delta_i(t)=1] = p_i(t)$, respectively. \\ 
 % For the sake of completeness, note that $\Pr[\gamma_i[t]=1 \mid \delta_i[t]=0]
 % = 0$ and $\Pr[\gamma_i[t]=0 \mid \delta_i[t]=0] = 1$. 
-The control-aware scheduler is assumed to be able of measuring the instantaneous
+The control-aware scheduler is assumed to be able to measure the instantaneous
 link quality for each sub-system, thus is aware of the loss probabilities
 $p_i(t)$. Further, the scheduler will make decisions by considering control and
 network behaviors. The network state is comprised of variables defined in the
@@ -78,31 +78,31 @@ then the set of slots in which a sampling event occurs are:
   \mathcal{G}_i \triangleq \lbrace t_{i,o}, \; t_{i,o} + D_{i}, \; t_{i,o} + 2 D_{i}, \; \dots \rbrace 
 \end{equation}
 
-As $t_{i,o}$ is an uniformly distributed random variable and not necessarily
+As $t_{i,o}$ is a uniformly distributed random variable and not necessarily
 equal for each sub-system, we allow sampling to operate in a non-synchronized
 fashion. 
 
 \begin{figure}[htb]
   \centering
-  \resizebox*{.5\textwidth}{!}{\input{figures/ageplot}} 
+  \resizebox*{.6\textwidth}{!}{\input{figures/ageplot}} 
   \caption[Example evolution of generation time $t_{i,g}$, received time
-  $t_{i,r}$ and update time $t_{i,g}$]{Evolution of generation time
-  $t_{i,g}(t)$, received time $t_{i,r}(t)$ and the update time $t_{i,g}(t)$
+  $t_{i,r}$ and update time $t_{i,u}$]{Evolution of generation time
+  $t_{i,g}(t)$, received time $t_{i,r}(t)$ and the update time $t_{i,u}(t)$
   depicted in y-axis versus time in x-axis. $t_{i,g}(t)$ and $t_{i,u}(t)$ are
   updated periodically with $D_i$ slots, while $t_{i,r}(t)$ can be updated
   asynchronously. On x-axis with $\delta_i(t_{1,2})=1$ two cases of successful
-  packet transmission for sub-system $i$ are depicted.}
+  packet transmission for sub-system $i$ are illustrated as an example.}
   \label{fig:ageplot}
 \end{figure}  
 
 Having received an update, the controller does not benefit from receiving an
 older plant measurement \cite{costa2016age}. Older packets are considered to be
 ``non-informative'' and obsolete. Therefore, sensors replace their packet in the
-transmit buffer with a more recent measurement upon arrival of a new update. We
+transmit buffer with a more recent measurement whenever a newer update arrives. We
 define a variable $t_{i,g}(t)$ that denotes the generation time of the packet
-waiting for transmission at $\sensor$. As packets are solely generated during a
-sampling event, $t \in \mathcal{G}_i$ are the only slots, in which $t_{i,g}$ is
-updated. Thus, $t_{i,g}$ evolves as follows:
+waiting for transmission at $\sensor$. Since packets are solely generated during
+a sampling event, $t \in \mathcal{G}_i$ are the only slots, in which $t_{i,g}$
+is updated. Thus, $t_{i,g}$ evolves as follows:
 
 \begin{equation}
   t_{i,g}(t+1) =
@@ -180,27 +180,26 @@ $\controller$:
   \end{cases} 
 \end{equation}
 
-Time dynamics of $t_{i,u}$ is seen in Fig.~(\ref{fig:ageplot}) where it takes
-the value of $t_{i,r}$ at the end of a control system period $t \in
-\mathcal{G}_i$.
+Time dynamics of $t_{i,u}$ is seen in Fig.~\ref{fig:ageplot} where it takes the
+value of $t_{i,r}$ at the end of a control system period $t \in \mathcal{G}_i$.
 
 \subsection{Age-of-Information Model}
 The discrete-time model allows for communication and control to evolve in
-different time steps. Particularly, in control, changes occur at sampling
-events. Thus, in a control application's point of view, plant observations
-included in packets age only every $D_i$ slots. Information staleness is then
-expressed in multiples of $D_i$. Therefore, we define AoI as the number of
-sampling periods elapsed since the generation of the freshest information at
-$\controller$ and can be determined at any slot $t$ as:
+different time steps. Particularly, changes in our control model occur at
+sampling events. Thus, in a control application's point of view, plant
+observations included in packets age only every $D_i$ slots. Information
+staleness is then expressed in multiples of $D_i$. Therefore, we define AoI as
+the number of sampling periods elapsed since the generation of the freshest
+information at $\controller$, which can be determined at any slot $t$ as:
 
 \begin{equation}
   \label{eq:aoi}
   \Delta_i(t) = \ceil{\dfrac{t - t_{i,u}(t)}{D_{i}}} 
 \end{equation}
 
-It should be noted that, since packets arrive at least one slot delayed, they
-can never be utilized to compute the control input of the same sampling period
-in which they are received. Hence, the minimum AoI in our scenario is one, i.e.,
+It should be noted that since packets arrive at least one slot delayed, a packet
+received in a sampling period can never be utilized immediately in the same
+sampling period. Hence, the minimum AoI in our scenario is one, i.e.,
 $\Delta_i(t) \ge 1,\forall i,t$.
 
 \subsection{Remote Estimation and Control Law}
@@ -210,26 +209,27 @@ $\controller$ employs a Kalman-like state estimator $\estimator$ based on the
 following assumptions:
 
 \begin{theorem}
-  The controller $\controller$ and its estimator $\estimator$ are sware of the
+  The controller $\controller$ and its estimator $\estimator$ are aware of the
   control system parameters $\boldsymbol{A}_i, \boldsymbol{B}_i$ and
   $\boldsymbol{w}_i$.
 \end{theorem}
 
 \begin{theorem}
-  $t_{i,o}, D_i$ and $t$ are known by the controller. 
+  $t_{i,o}, D_i$ and $t$ are also known by the controller. 
 \end{theorem}
 
 Assumption 1 is motivated by the time-invariant nature of the sub-system's
 dynamics. Assumption 2 allows the estimation-based controller to map any $t$ to
 $k_i$ by using Eq.~\eqref{eq:k_map}. As a result, the controller can determine
 the AoI of its most up-to-date plant state information $\boldsymbol{x_i}[k_i -
-\Delta_i[k_i]]$ that is $\Delta_i[k_i]$ sampling periods old.
+\Delta_i[k_i]]$ which is $\Delta_i[k_i]$ sampling periods old.
 
 Combining our assumptions, each estimator $\estimator$ predicts the current
 plant state by means of a conditional expectation, i.e.,
 $\hat{\boldsymbol{x}}_i[k_i] = \E\left[\boldsymbol{x}_i[k_i] \mid \Delta_i[k_i],
-\boldsymbol{x}_i[k_i-\Delta_i] \right]$. We leverage the results in
-\cite{ayan2019age}, that the optimal mean-square estimation is obtained by:
+\boldsymbol{x}_i[k_i-\Delta_i] \right]$. We leverage the results from
+\cite{ayan2019age}, stating that the optimal estimation which minimizes the
+mean-squared error is obtained by:
 
 \begin{equation}
   \label{eq:estimatedstate}
@@ -257,14 +257,14 @@ squared error (MSE) at $\controller$ is given as:
 \end{align}
 
 The derivations are found in \cite{ayan2019age}. It is important to note that
-Eq.~\eqref{eq:estimationerror} is only a function of AoI $\Delta_i[k_i]$ and
+Eq.~\eqref{eq:estimationerror} is only a function of $\Delta_i[k_i]$ and
 independent from the actual system state $\boldsymbol{x}_i[k_i]$. This would not
 be true in the case of time-variant control systems. Here, we define
-$g(\Delta_i[k_i])$ as an age-penalty function that penalizes high estimation
-errors and will be subject to minimization in the scheduling problem. 
+$g(\Delta_i[k_i])$ as our AoI-based age-penalty function that penalizes high
+estimation errors and will be subject to minimization in the scheduling problem.
 
 After obtaining a state estimation, it is utilized in calculating the control
-input according to the control law:
+input according to the following control law:
 
 \begin{equation}
   \label{eq:controllaw}
@@ -302,12 +302,12 @@ From Eq.~\eqref{eq:estimationerror} it is evident, that expected estimation
 performance is controlled by the AoI of sub-systems. By scheduling a certain
 control application, information with low $\Delta_i[k_i]$ is provided to its
 estimator, resulting in low age-penalties. Our goal is to derive a scheduler
-that maximizes overall estimation accuracy by minimizing the total cost. Denote
-$\mu(t')\in\left\{\varnothing, 1, \dots,N \right\}$ as the scheduling decision
-at slot $t'$, which indexes the sub-system that is granted medium access. Note
-that $\mu(t')=i$ implies $\delta_i(t')=1$. We are interested in the class of
-scheduling policies $\pi$ that consists of a sequence of scheduling decisions
-$\mu(t')$ for the next $H \in \mathbb{Z}^+$ slots:
+that maximizes overall estimation accuracy by minimizing the total expected
+cost. Denote $\mu(t')\in\left\{\varnothing, 1, \dots,N \right\}$ as the
+scheduling decision at slot $t'$, which indexes the sub-system that is granted
+medium access. Note that $\mu(t')=i$ implies $\delta_i(t')=1$. We are interested
+in the class of scheduling policies $\pi$ that consists of a sequence of
+scheduling decisions $\mu(t')$ for the next $H \in \mathbb{Z}^+$ slots:
 
 \begin{equation}
   \pi=\left\{ \mu(t), \mu(t+1), \dots, \mu(t+H-1) \right\}
@@ -322,7 +322,7 @@ decision under stochastic uncertainty \cite{bertsekas1995dynamic}. Such a
 problem has two principal features. An underlying discrete-time dynamic system
 and an \textit{additive} cost function $J$ that is dependent on the system's
 state. In our case, the dynamic system is the wireless network whose system
-state $\boldsymbol{s} \in \mathbb{Z}^{4\cdot N}$ can be defined as:
+state $\boldsymbol{s} \in \mathbb{Z}^{4\cdot N}$ we define as:
 
 \begin{equation}
   \boldsymbol{s}(t) \triangleq \left[\boldsymbol{t}_g(t) \quad \boldsymbol{t}_r(t) \quad \boldsymbol{t}_u(t) \quad \boldsymbol{q}(t)\right]^T, 
@@ -352,9 +352,9 @@ probability to a possible next state $\boldsymbol{s'}$ is expressed by:
   \right] \in \left\{ p \cdot q \mid p\in\mathcal{L},q\in\mathcal{T} \right\},
 \end{equation}
 
-where $\mathcal{L}=\left\{p_G,p_B\right\}$ are GE channel state dependent loss
-probabilities and $\mathcal{T}=\left\{f,r\right\}$ elements of the underlying
-Markov chain's stochastic state transition defined in
+where $\mathcal{L}=\left\{p_G,p_B\right\}^N$ are GE channel state dependent loss
+probabilities and $\mathcal{T}=\left\{f,r\right\}$ the failure and recovery
+rates defined in the Markov chain's stochastic transition matrix in
 Eq.~\eqref{eq:GE_transition}.
 
 Consider $C(\boldsymbol{s}(t))$ as state cost incurred by being in
@@ -370,9 +370,9 @@ where $g(\Delta_i[k_i(t)])$ is the expected estimation error of a single
 sub-system as defined in Eq.~\eqref{eq:estimationerror}. 
 
 The cost function $J$ is \textit{additive} over time in the sense that cost
-acquired at time $t$, i.e., $C(\boldsymbol{s}(t))$, accumulates over time.
-Meaning, the total expected finite horizon cost $J_{\pi}(\boldsymbol{s} (t))$
-for any initial state $\boldsymbol{s}(t)$ and horizon $H$ is defined as:
+acquired at time $t$ $C(\boldsymbol{s}(t))$, accumulates over time. Meaning that
+the total expected finite horizon cost $J_{\pi}(\boldsymbol{s}(t))$ for any
+initial state $\boldsymbol{s}(t)$ and horizon $H$ is defined as:
 
 \begin{equation}
   \label{eq:horizoncost}	
@@ -383,7 +383,7 @@ Note that since network transmissions occur stochastically,
 $C(\boldsymbol{s}(t))$ is a random variable and therefore we consider the
 expectation of the total cost. Further, as feasible next states depend on the
 scheduling decisions $\mu(t')$, the subscript $\pi$ in $J_\pi$ and $\E_\pi$
-indicate that Eq.~\eqref{eq:horizoncost} considers the expected cost when the
+indicate that Eq.~\eqref{eq:horizoncost} quantifies the expected cost when the
 scheduling policy $\pi = \{ \mu(t), {\mu(t+1)}, \dots, \mu(t+H-1) \}$ is
 employed over the horizon $H$. Our goal is to find the optimal policy $\pi^*$,
 such that $J_{\pi^*}(\boldsymbol{s}(t))$ is minimal:
@@ -405,6 +405,6 @@ $\mu(t) \in \mathcal{M}(\boldsymbol{s}(t))$, with:
 
 This allows us to confine our search for an optimal policy within this class of
 narrowed down set. Together with the search space, the scheduler's complexity is
-also reduced without losing optimality. Throughout the remaining sections, we
+also reduced without losing optimality. Throughout the remaining thesis, we
 refer to the minimization problem in Eq.~\eqref{eq:minimizationproblem} as the
 $H$-stage problem and drop the subscript $\pi$ for brevity.

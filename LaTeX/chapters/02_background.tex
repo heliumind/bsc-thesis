@@ -24,26 +24,26 @@ Section.~\ref{sec:GE}.
 % control-loops and the coexistence of heterogenous traffic types imply that
 % incorporating control metrics in network design can achieve performance benefits
 % on the whole system. \\
-In communication research a trend towards cross-layer network design has been
-shown to be beneficial in NCS settings \cite{park2017wireless}. Error reports
+In communication research, a trend towards cross-layer network design has been
+shown to be beneficial for NCS settings \cite{park2017wireless}. Error reports
 were the first cross-layer metric considered in a centralized resource
 scheduling problem with multiple NCS sharing a communication channel
 \cite{walsh2001scheduling}. Here, each sensor transmits its estimation error to
 the scheduler. The scheduler then allocates free network resources to
 sub-systems starting from the ones with maximum-error. In order to account for
-underlying time-critical requirements in NCS applications,
+underlying time-critical requirements of NCS applications,
 \cite{vilgelm2017control} compares control-agnostic scheduling to control-aware
 schedulers in a single-hop cellular NCS with varying channel qualities among
 control loops. A heuristic scheduling policy is proposed which grants medium
 access greedily to the sub-systems with the highest expected error. They have
-shown, their control-aware scheduler outperforms an agnostic controller in terms
+shown that a control-aware scheduler outperforms an agnostic controller in terms
 of maximum throughput with respect to QoC. \cite{vasconcelos2017optimal}
-introduces \textit{one-shot} joint scheduling and estimation problem under
-resource constraints. Here, a network is shared by multiple sensor and estimator
-pairs. Given the probabilistic distributions of individual states, the
+introduces \textit{one-shot} joint scheduling and studies remote estimation
+under resource constraints. Here, a network is shared by multiple sensor and
+estimator pairs. Given the probabilistic distributions of individual states, the
 centralized scheduler selects a single sensor-estimator pair to transmit. The
 authors have shown that it is globally optimal to choose the maximum quadratic
-norm as scheduling and mean-value estimation as the estimation strategy. As the
+norm as scheduling and mean-value estimate as the estimation strategy. As the
 name one-shot suggests, the paper focuses on a single transmission decision and
 does not consider application-dependent propagation of estimation error over
 multiple time-steps.
@@ -54,33 +54,32 @@ generalized joint design in NCS. In \cite{kadota2018scheduling}, a multi-user
 scenario in which each user is prone to a time-invariant packet loss is
 considered. They formulate a discrete-time wireless scheduling problem and show
 analytically that the minimum AoI is achieved by updating the user with the
-highest AoI. While AoI itself cannot be directly mapped into closed loop control
-applications due to AoI evolving linear in time and uniform for all applications
-by design. Therefore, \cite{kosta2017age} proposed a non-linear aging concept
-called \textit{value-of-information} (VoI) which takes individual application
-dynamics into account. \\
-AoI based application-dependent age penalties, has first been adopted in
+highest AoI. Since AoI evolves linear in time and is uniform for all
+applications by design, it cannot be directly mapped into closed loop control.
+Therefore, \cite{kosta2017age} proposed a non-linear aging concept called
+\textit{value-of-information} (VoI) which takes individual application dynamics
+into account. \\
+AoI based application-dependent age penalties have first been adopted in
 \cite{ayan2019age} for a centralized two-hop uplink and downlink scheduling
 problem with heterogenous feedback control loops sharing a cellular network. A
 non-linear age dynamic is derived by using AoI as an intermediate metric and
 utilizing application specific system parameters. The scheduler accounts for
 heterogenous NCS as the proposed age-penalty captures both the propagation of
-individual system uncertainties and of the estimation error over time. The
-authors show that optimal AoI scheduling results in worse control performance
-compared to their proposed greedy VoI scheduling. They extend their findings in
-\cite{ayan2020optimal} for multiple heterogeneous NCS but in a single hop
-scenario and propose an optimal scheduler that minimizes the discounted
-age-penalty over an infinite time horizon. A discount factor takes the
-importance of short-term and long-term penalties into consideration, hence,
-controlling the scheduler's farsightedness. However, similar to existing
-literature, this solution assumes a Bernoulli loss process. To consider
-time-varying channel conditions, \cite{ayan2020aoi} assumes i.i.d. packet loss
-described by a rectified Gaussian distribution. Although time-varying channel
-conditions prevent the calculation of infinite-horizon scheduling policies, they
-provide an online scheduling policy that is age-optimal for a finite horizon
-using dynamic programming and stochastic optimization. Nonetheless, obtaining
-such a policy is computationally expensive and merely optimal for a finite
-horizon.
+individual system uncertainties and estimation error over time. The authors show
+that optimal AoI scheduling results in worse control performance compared to
+their proposed greedy VoI scheduling. They extend their findings in
+\cite{ayan2020optimal} for multiple heterogeneous NCS in a single hop scenario
+and propose an optimal scheduler that minimizes a discounted age-penalty over an
+infinite time horizon. The discount factor takes the importance of short-term
+and long-term penalties into consideration, hence, controlling the scheduler's
+farsightedness. However, similar to existing literature, this solution assumes a
+Bernoulli loss process. To consider time-varying channel conditions,
+\cite{ayan2020aoi} assumes i.i.d. packet loss described by a rectified Gaussian
+distribution. Although time-varying channel conditions prevent the calculation
+of infinite-horizon scheduling policies, they provide an online scheduling
+policy that is age-optimal for a finite horizon using dynamic programming and
+stochastic optimization. Nonetheless, obtaining such a policy is computationally
+expensive and merely optimal for a finite horizon.
 
 \section{Gilbert-Elliot Model} \label{sec:GE}
 
@@ -100,20 +99,19 @@ distributed nodes (users).
   \label{fig:GE_FSM}
 \end{figure}
 
-In the literature, the time-varying quality of a bursty error wireless channel
-is commonly modeled using the \textit{Gilbert–Elliot} Model (GE)
+In the literature, the time-varying quality wireless channel prone to bursty
+errors is commonly modeled using the \textit{Gilbert–Elliot} Model (GE)
 \cite{gilbert1960capacity, elliott1963estimates}. It is a widely used stochastic
-model for describing bit error processes in transmission channels, where errors
-are correlated. There exits several parameterization of this model, but we will
-be using the specific Markov chain shown in Fig.~\ref{fig:GE_FSM}. This model is
-a two-state homogenous Markov chain where each of the two states corresponds to
-high or low channel quality and is called good state $G$ or bad state $B$,
-respectively. Each of them may generate errors as independent events at a state
-dependent error rate $p_G$ in the good and $p_B$ in the bad state. As shown in
-\cite{hasslinger2008gilbert}, in order to apply the GE model in packet loss
-processes, we consider the packet reception process as a sequence of bits: 0
-stands for a successful arrival of a packet whereas 1 denotes a lost or
-corrupted packet.
+model for describing correlated bit error processes in transmission channels.
+There exits several parameterization of this model, but we will be using the
+specific Markov chain shown in Fig.~\ref{fig:GE_FSM}. This model is a two-state
+homogenous Markov chain where each of the two states corresponds to high or low
+channel quality and is called good state $G$ or bad state $B$, respectively.
+Each of them may generate errors as independent events at a state dependent
+error rate $p_G$ in the good and $p_B$ in the bad state. In order to apply the
+GE model in packet loss processes, we consider the packet reception process as a
+sequence of bits: 0 stands for a successful arrival of a packet whereas 1
+denotes a lost or corrupted packet \cite{hasslinger2008gilbert}.
 
 Let $q(t)$ denote the state at time $t$, then the GE model is defined by the
 stochastic transition matrix $\boldsymbol{T}$:
@@ -141,7 +139,7 @@ be defined as follows:
 \end{equation}
 
 The stationary state probabilities can be interpreted as the average percentage
-of time, in which the channel is in $G$ or $B$. Thus, the \textit{average error
+of time in which the channel is in $G$ or $B$. Thus, the \textit{average error
 probability} is obtained as:
 
 \begin{equation}
@@ -151,18 +149,19 @@ probability} is obtained as:
 
 \subsection{Mean Sojourn Time}
 Another important characteristic defined by the GE model is the mean sojourn
-time, i.e., the average duration that the wireless channel stays in a state. In
-common NCS scenarios, packet transmissions occur in discrete time slots. Hence,
-the channel can only change its state in these time slots and the amount of time
-spent in a state is a geometrically distributed random variable $\tau_G$ and
-$\tau_B$. Given the state transition probabilities, the mean sojourn times are:
+time, i.e., the average duration that the channel stays in a state. In common
+NCS scenarios, packet transmissions occur in discrete time slots. We assume the
+channel only changes its state during these time slots, thus the amount of time
+spent in a state can be expressed by a geometrically distributed random variable
+$\tau_G$ and $\tau_B$. Given the state transition probabilities, the mean
+sojourn times are:
 
 \begin{equation}
   T_G = \E[\tau_G] = \frac{1}{f} \quad \textrm{and} \quad T_B = \E[\tau_B] = \frac{1}{r}
 \end{equation}
 
-Table~(\ref{tab:sojournTime}) summarizes sojourn times measurements performed
-under different GE parameterization. The measurements resembles the expected
+Table~(\ref{tab:sojournTime}) summarizes sojourn time measurements performed
+under different GE parametrization. The measurement resembles the expected
 statistical properties of a geometric distribution and confirms our mapping of
 state transition probabilities to their corresponding mean sojourn time. Note
 that both $f$ and $r$ control the ``burstiness'' of the modeled channel. For
@@ -191,5 +190,5 @@ on average. Hence, longer burst errors are to be expected.
   probabilities. Note that the state transition probabilities are chosen
   symmetrically for this measurement, i.e. $f=r$}
   \label{tab:sojournTime}
-\end{center}
+  \end{center}
 \end{table}
