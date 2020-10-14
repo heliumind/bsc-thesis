@@ -176,12 +176,12 @@ def plot_costMap():
     fig, ax = plt.subplots(1, 1, figsize=(10, 6))
 
     colorList = ['C2', 'C1', 'C0']
-    aoi = np.arange(100)
+    aoi = np.arange(20)
     aoi = np.stack((aoi,aoi,aoi))
 
     for folderName in os: 
         costMap = np.genfromtxt(folderName + 'costMap.csv', delimiter=",")
-        ax.plot(aoi.T, costMap.T, colorList.pop(), alpha=0.7, label=folderName.split('/')[-2])
+        ax.plot(aoi.T, costMap[:, :20].T, colorList.pop(), alpha=0.7, label=folderName.split('/')[-2])
             
     ax.set_yscale("log")
     ax.set_xlabel('Age of Information', fontsize=mLabelSize)

@@ -18,8 +18,8 @@ mLabelSize = 20
 mLineWidth = 3
 mLegendSize = 20
 
-prefix = 'GES2_'
-folderName = '../results/GEPerformance/GES/CoherenceTime_10/'
+prefix = 'GES3_'
+folderName = '../results/GEPerformance/GES/IEEE/'
 
 
 def mean_confidence_interval(data, confidence=0.95):
@@ -343,7 +343,10 @@ def plot_networkshare_against_H_separate(H):
     loopList = ['A100', 'A125', 'A150']
 
     for h in H:
-        UR = np.zeros(200)
+        if h == 4:
+            UR = np.zeros(160)
+        else:
+            UR = np.zeros(200)
         for loopName in loopList:
             with open(folderName + 'FH' + str(h) + '/' + loopName + '_sumScheduledCnt.json') as json_file:
                 UR = UR + json.load(json_file)
@@ -369,7 +372,7 @@ def plot_networkshare_against_H_separate(H):
                 json_file.close()
 
             fh_ns = fh_ns / UR_against_H[h-1]
-            NS_against_H.append(mean_confidence_interval(fh_ns))
+            NS_against_H.append(mean_confidence_interval(fh_ns*100))
 
             mean = [i[0] for i in NS_against_H]
             err = [i[1] for i in NS_against_H]
@@ -433,7 +436,7 @@ def plot_complexity_against_H(H):
 
 plot_J_against_H(H)
 
-# plot_complexity_against_H(H)
+plot_complexity_against_H(H)
 
 plot_aoi_against_H_separate(H)
 
@@ -441,6 +444,6 @@ plot_nie_against_H_separate(H)
 
 # plot_nie_against_H_separate_boxplot(H)
 
-plot_networkshare_against_H_separate(H)
+# plot_networkshare_against_H_separate(H)
 
 plt.show()
