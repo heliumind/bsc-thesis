@@ -3,10 +3,43 @@
 % contribution of this work is highlighted and the results are recapitulated.
 % Remaining questions are stated and ideas for future work are expressed. 
 
-The GE model provides an abstraction level, where the impact of different error
-rates, burstiness of error pattern etc. can be studied in a common modeling
-framework.
+In this work, we have studied a centralized resource scheduling problem where
+multiple NCSs share a wireless communication channel with time-varying packet
+loss according to the Gilbert-Elliot channel model. Sub-systems compete for
+network resources to improve the accuracy of their remote estimation process.
+AoI was utilized as an interface between control applications and the network to
+define characteristic age-penalty functions. Combining these insights, we have
+proposed an AoI-based control-aware scheduling algorithm that takes the GE
+channel fully into account. By looking $H$ slots into the future, the scheduler
+builds a tree with every possible outcome. It then grants medium access to the
+sub-system which is expected to incur the least age cost. We evaluated the
+proposed method in simulations with time-varying and correlated packet loss
+probabilities. In general, sub-systems produce more accurate estimations with
+increased $H$ since the scheduler becomes more farsighted. On the other hand,
+solving the $H$-stage problem with dynamic programming to obtain a global
+optimal policy incurs exponential complexity. At the same time, we observed that
+the performance gain achieved by increasing $H$ diminishes after $H=5$. Such a
+point is obviously strongly scenario dependent but can be easily be found
+heuristically. We conclude that the scheduler can be designed with a $H$ chosen
+to mitigate complexity while still being able to provide adequate remote state
+estimation performance. 
 
-More research is needed to make the proposed scheduler more efficient and reduce
-its complexity. 
-It may be possible to find a tra
+In the end, the simulation study has shown that making the state-of-the-art
+finite horizon scheduler fully GE channel-aware by considering every possible
+outcome results in exploding tree size and is thus not scalable. More effort is
+needed to make the finite horizon scheduling scheme feasible in real-life
+network conditions. While our proposed algorithm finds the global optimal
+scheduling policy, it may be possible to find a trade-off between optimality and
+complexity, as long as possible GE channel transitions are not neglected. A
+compromise may be found by combining FHS and GES. Namely, we take the tree
+structure of FHS but explore possible GE channel transitions by adapting the GES
+branch transition probabilities on the certain levels. This way we still are GE
+channel-aware without increasing complexity.
+
+For simplicity, we assumed scalar sub-systems in our simulation setup. Further
+research can be put into evaluating the efficiency of finite horizon scheduling
+in real-life use-cases. An example would be a vehicular scenario case-study
+where the users are applications from the vehicular domain, e.g. cruise control,
+motor speed etc. 
+
+% TODO: Add OS effect conclusion
