@@ -39,7 +39,7 @@ a wireless medium in packets containing a single measurement. We assume
 simplified packet transmission, where each packet sent in slot $t$ is received
 within the same slot and packets are neither acknowledged nor retransmitted to
 reduce protocol overhead. Medium access is granted by a centralized entity
-called \textit{scheduler}, which at each time slot $t$, decides which sub-system
+called \textit{scheduler}, which at each time slot $t$ decides which sub-system
 is allowed to transmit its latest plant measurement. Moreover, only a single
 transmission resource is allocated within a single time slot. Let $\delta_i(t)
 \in \left\{0,1\right\}$ denote the scheduler decision variable being
@@ -53,8 +53,8 @@ $\delta_i(t)=0$ otherwise. Then the following holds for all time slots:
 We consider a bursty GE channel where the link quality between each
 sensor-controller pair is time and channel state dependent. (See
 Sec.~{\ref{sec:GE}}) Each link is prone to its own channel state $q_i(t)$ which
-determines the probability $p_i(t) \in \left\{p_G,p_B\right\}$ a packet is lost.
-That is, if we define a success indicator variable $\gamma_i(t)\in\{0,1\}$
+determines the probability $p_i(t) \in \left\{p_G,p_B\right\}$ a packet is lost
+with. That is, if we define a success indicator variable $\gamma_i(t)\in\{0,1\}$
 representing a failed $\gamma_i(t)=0$ or a successful $\gamma_i(t)=1$ packet
 reception, then the probabilities for a success and failure are given by
 $\Pr[\gamma_i(t)=1 \mid \delta_i(t)=1] = 1-p_i(t)$ and  $\Pr[\gamma_i(t)=0 \mid
@@ -190,10 +190,9 @@ The discrete-time model allows for communication and control to evolve in
 different time steps. Particularly, changes in our control model occur at
 sampling events. Thus, in a control application's point of view, plant
 observations included in packets age only every $D_i$ slots. Information
-staleness is then expressed in multiples of $D_i$. Therefore, we AoI is defined
-as the number of sampling periods elapsed since the acquisition of the latest
-received system state at $\controller$, which can be determined at any slot $t$
-as:
+staleness is then expressed in multiples of $D_i$. Therefore, we define AoI as
+the number of sampling periods elapsed since the acquisition of the latest
+received system state at $\controller$ and can be determined at any slot $t$ as:
 
 \begin{equation}
   \label{eq:aoi}
@@ -303,14 +302,14 @@ matrix.
 From Eq.~\eqref{eq:estimationerror} it is evident, that expected estimation
 performance is controlled by the AoI of sub-systems. By scheduling a certain
 control application, information with low $\Delta_i[k_i]$ is provided to its
-estimator, resulting in low age-penalties. In chapter~\ref{ch:scheduler}we will
-derive a scheduler whose aim is to minimizes the total expected cost and thereby
+estimator, resulting in low age-penalties. In Ch~\ref{ch:scheduler} we will
+derive a scheduler whose aim is to minimize the total expected cost and thereby
 providing good overall estimation accuracy. Let $\mu(t')\in\left\{\varnothing,
 1, \dots,N \right\}$ denote the scheduling decision at slot $t'$, which indexes
 the sub-system that is granted medium access. Note that $\mu(t')=i$ implies
-$\delta_i(t')=1$. We are interested in finding scheduling policies $\pi$
-consisting of a sequence of scheduling decisions $\mu(t')$ for the next $H \in
-\mathbb{Z}^+$ slots:
+$\delta_i(t')=1$. We are interested in scheduling policies $\pi$ consisting of a
+sequence of scheduling decisions $\mu(t')$ for the next $H \in \mathbb{Z}^+$
+slots:
 
 \begin{equation}
   \pi=\left\{ \mu(t), \mu(t+1), \dots, \mu(t+H-1) \right\}

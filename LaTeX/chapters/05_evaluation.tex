@@ -71,8 +71,7 @@ probabilities and stays in the good state for the majority of time. For each
 scenario we vary the finite Horizon $H=\left\{ 1, \cdots, 10\right\}$ for FHS
 and $H=\left\{ 1, \cdots, 4\right\}$ for GES to study its effect on AoI and MSE.
 Each configuration is simulated for a duration of $D=20000$ time slots and
-repeated $R=200$ times in order to compensate for the randomness introduced by
-system noise and packet dropout.
+repeated $R=200$ times. 
 
 \subsection{Performance Metrics} 
 
@@ -190,7 +189,7 @@ AoI indicates a more frequent update rate.
   \hfill
   \begin{subfigure}{0.49\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{GES2_AoI_against_H_separate}
+    \includegraphics[width=\textwidth]{GES3_AoI_against_H_separate}
     \caption{Scenario 3 with GES}
   \end{subfigure}
   \caption{Scenario 2 \& 3: Average AoI vs. finite horizon $H$}
@@ -210,11 +209,11 @@ its link transiting to good state.
 Fig.~\ref{fig:AoIseperate2} plots AoI performance for scenario 2 and 3,
 respectively. For FHS the same characteristic trend for AoI can be observed.
 However, absolute AoI values are shifted upwards for scenario 2 and downwards
-for scenario 3. This is a result of different channel quality in each scenario.
-Although the average packet loss probability is equal for scenario 1 and 2, the
-second channel is expected to stay longer in bad state. This results in longer
-consecutive packet losses, thus increasing AoI in the network. The effect on
-scenario 3 can be explained analogously.
+for scenario 3. This is a result of different channel qualities in each
+scenario. Although the average packet loss probability is equal for scenario 1
+and 2, the second channel is expected to stay longer in bad state. This results
+in longer consecutive packet losses, thus increasing AoI in the network. The
+effect on scenario 3 can be explained analogously.
 
 \subsection{Age-of-Information Distribution}
 
@@ -234,19 +233,20 @@ comes to time-critical-requirements of underlying sub-systems
 performance, we have exemplary measured AoI distribution in the network for one
 simulation run consisting of $R=50000$ time slots in scenario 1.
 Fig.~\ref{fig:AoIHist} shows the amount of time slots each sub-system were in
-the state of respective AoI for scenario 1 and FHS with $H=2$. As expected, the
-most up-to-date plant measurements were available to task-critical sub-systems.
-This is seen in $A_3$ having the highest AoI=1 count, followed by $A_2$ and
-$A_1$. We can see the consequence of the scheduler distributing network
-resources unequal, in a shift of counts for higher AoI values. 
+the state of respective AoI for FHS with $H=2$. As expected, the most up-to-date
+plant measurements were available to task-critical sub-systems. This is seen in
+$A_3$ having the highest 1 count, followed by $A_2$ and $A_1$. We can see the
+consequence of the scheduler distributing network resources unequally, in a
+shift of counts for higher AoI values, where $A_1$ has the highest counts and
+$A_1$ the lowest.
   
 \cite{ayan2020probability} provides a closed-form expression for the AoI
 probability mass function in single and multi-hop networks. In contrast, they
 consider a single NCS transmitting over a multi-hop network with time-invariant
-packet oss probabilities. Although not directly applicable, we observe a similar
-geometric AoI distribution in our measurement. Fig.~\ref{adx:aoiHist} includes
-the AoI histogram for the equivalent scenario studied in the paper and validates
-their analytical AoI probability mass function for single hop networks.
+packet loss probabilities. Although not directly applicable, we observe a
+similar geometric AoI distribution in our measurement. Fig.~\ref{adx:aoiHist}
+includes the AoI histogram for the equivalent scenario studied in the paper and
+validates their analytical probability mass function for single hop networks.
 
 \subsection{Remote Estimation Performance}
 
@@ -286,21 +286,29 @@ Eq.~\eqref{eq:gfunction}. This in turn leads to equal long-term averages as the
 scheduling decisions become more ``long-term optimal''. Moreover, notice how
 sub-system 3 is the one with the highest MSE in the network, although $\Delta_3$
 is the lowest among all $\Delta_i$. This is because according to
-Eq.~\ref{eq:estimationerror} estimation error is obtained through AoI and the
+Eq.~\eqref{eq:estimationerror} estimation error is obtained through AoI and the
 underlying system dynamics, meaning that estimation errors propagate differently
 for every sub-system.
 
-To our surprise, a slight increase of average MSE in Fig.~\ref{fig:surprise} is
-not seen. In a channel with mean sojourn time of 3.33, we initially expected to
-observe an increase starting from $H=4$ as the scheduler plans too many time
-slots ahead, which would result in possible bad schedules taken in terms of
-estimation performance.
+To our surprise, comparing absolute values of $\overline{MSE}$ between FHS and
+GES, suggests that GES does not improve estimation accuracy compared to its base
+scheduler in a GE-channel although it is aware of possible channel transitions.
+Furthermore, we hoped to observe a slight increase of average MSE in
+Fig.~\ref{fig:surprise}. In a channel with mean sojourn time of 3.33, we
+initially expected to observe an increase starting from $H=4$ as the scheduler
+plans too many time slots ahead, which would result in possible bad schedules
+taken in terms of estimation performance.
 
 Fig.~\ref{fig:MSEavg2} plots FHS and GES estimation performance for scenario 2
-and 3. We examine a similar shift for MSE trajectories with FHS due to changing
-channel quality. However, in the case of GES, 
-
-% TODO: Add observations for MSEavg2
+and 3. We examine a shift for MSE trajectories with FHS for both scenarios as
+already seen with AoI, which can also be explained with changing channel
+qualities. However, in the case of GES in scenario 2, estimation error of
+subs-system 3 increases after $H=3$. We interpret this effect as the result of
+the channel being too random, which the scheduler can not react to as it merely
+considers estimation errors in expectation. Thus, in combination with the longer
+burst errors, the bad scheduling decisions propagate into growing estimation
+errors. As scenario 3 has the best channel quality on average, an overall
+decreasing trend is observed for GES.
 
 \begin{figure}[htb]
   \centering
@@ -323,7 +331,7 @@ channel quality. However, in the case of GES,
   \hfill
   \begin{subfigure}[b]{0.49\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{GES2_MSE_against_H_separate}
+    \includegraphics[width=\textwidth]{GES3_MSE_against_H_separate}
     \caption{Scenario 3 with GES}
   \end{subfigure}
   \caption{Scenario 2 \& 3: Average MSE vs. finite horizon $H$}
@@ -348,18 +356,16 @@ hand, a larger $H$ makes the scheduler more farsighted which may lead to an
 improvement in performance. However, Fig.~\ref{fig:MSEavg} shows that the
 expected performance gain it brings in terms of cost diminishes after a certain
 $H$ value. Consequently, a finite $H$ can be chosen without losing any notable
-performance. 
-
-To get an idea on how scheduler complexity increases with $H$,
+performance gain. \\
+o get an idea on how scheduler complexity increases with $H$,
 Tab.~\ref{tab:complexity} compares the average number of nodes in the root tree
 during simulations (GES) to its base scheduler (FHS) and the worst-case (WC)
 with sampling period $D_i=1$. We observe that being fully GE-aware incurs
-substantial complexity, reflected in the average node count for WC and GES. This
-is because GES takes independent GE channel transitions into account, while FHS
-assumes a constant channel. We further notice the impact of constraining the
-action set as in Eq.~\eqref{eq:admissibleactions} on the tree size. In our
-implementation, the search space is reduced up to on average compared to the
-worst-case scenario.
+substantial complexity, reflected in the average node count for WC and GES. We
+further notice the impact of constraining the action set as in
+Eq.~\eqref{eq:admissibleactions} on the tree size. In our implementation, the
+search space is reduced up to 46\% on average compared to the worst-case
+scenario.
 
 \begin{table}[htb]
   \begin{center}
@@ -381,7 +387,7 @@ Nevertheless, finding the optimal scheduling policy by considering every
 possible network outcome is not scalable, especially for NCS scenarios with
 Gilbert-Elliot channels. During evaluation we stopped GES simulations at $H=4$
 as runtime were not feasible for subsequent horizons. To tackle scalability for
-the proposed approach, a trade-off has to be found between complexity by
+the proposed approach, a trade-off has to be found between optimality by
 increasing H and complexity by decreasing H. In particular, the tree size has to
 be reduced without neglecting possible GE channel transitions. Inspired by how
 reinforcement learning copes with the \textit{exploration-exploitation dilemma},

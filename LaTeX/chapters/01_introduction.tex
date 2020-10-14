@@ -13,19 +13,20 @@ applications include vehicular networks, industrial automation, tele-robotics,
 smart grids and cyber-physical systems \cite{murray2003future}. From a system
 theoretical view, most of these emerging applications fall into the category of
 \textit{Networked Control Systems} (NCS), i.e., feedback control loops closed
-over a communication network. Each loop consists of a plant, a sensor, measuring
-the plant’s output, and the respective controller, reacting to the sensor’s
-data. \\
+over a communication network. Each loop consists of a plant, a sensor measuring
+the plant’s output, and the respective controller reacting to the sensor’s
+data.
+\\
 In a typical NCS scenario, multiple heterogenous NCSs share a wireless
 communication medium and compete for network resources to transmit their latest
 sensor measurements to the controllers. In order to manage limited network
 resources and to avoid collisions, the access to the network is granted by a
-manager that determines which subset of control loops are allowed to send their
-up-to-date state information. such a setting, the communication system needs to
-satisfy different time-critical-requirements of the underlying control loops,
-while dealing with problems inherent to the network, such as random delays,
-packet losses and time varying channel conditions. These shortcomings motivate
-\textit{control-aware} communication protocol design incorporating
+scheduler that determines which subset of control loops are allowed to send
+their up-to-date state information. In such a setting, the communication system
+needs to satisfy different time-critical-requirements of the underlying control
+loops, while dealing with problems inherent to the network, such as random
+delays, packet losses and time varying channel conditions. These shortcomings
+motivate \textit{control-aware} communication protocol design incorporating
 prioritization and efficient scheduling of NCSs. Such schedulers aim to mitigate
 these network induced challenges, which would otherwise result in a reduced
 precision of control actions and degraded control quality
@@ -107,7 +108,7 @@ applications by design, it cannot be directly mapped into closed loop control.
 Therefore, \cite{kosta2017age} proposed a non-linear aging concept called
 \textit{value-of-information} (VoI) which takes individual application dynamics
 into account. \\
-AoI based application-dependent age penalties have first been adopted in
+AoI-based application dependent age penalties have first been adopted in
 \cite{ayan2019age} for a centralized two-hop uplink and downlink scheduling
 problem with heterogenous feedback control loops sharing a cellular network. A
 non-linear age dynamic is derived by using AoI as an intermediate metric and
@@ -119,7 +120,7 @@ their proposed greedy VoI scheduling. They extend their findings in
 \cite{ayan2020optimal} for multiple heterogeneous NCS in a single hop scenario
 and propose an optimal scheduler that minimizes a discounted age-penalty over an
 infinite time horizon. The discount factor takes the importance of short-term
-and long-term penalties into consideration, hence, controlling the scheduler's
+and long-term penalties into consideration, hence controlling the scheduler's
 farsightedness. However, similar to existing literature, this solution assumes a
 Bernoulli loss process. To consider time-varying channel conditions,
 \cite{ayan2020aoi} assumes i.i.d. packet loss described by a rectified Gaussian

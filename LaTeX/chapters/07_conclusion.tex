@@ -26,15 +26,18 @@ performance.
 
 In the end, the simulation study has shown that making the state-of-the-art
 finite horizon scheduler fully GE channel-aware by considering every possible
-outcome results in exploding tree size and is thus not scalable. More effort is
-needed to make the finite horizon scheduling scheme feasible in real-life
-network conditions. While our proposed algorithm finds the optimal scheduling
-policy for a given horizon, it may be possible to find a trade-off between
-optimality and complexity, as long as possible GE channel transitions are not
-neglected. A compromise may be found by combining FHS and GES. Namely, we take
-the tree structure of FHS but explore possible GE channel transitions by
-adapting the GES branch transition probabilities on the certain levels. This way
-we still are GE channel-aware without increasing complexity.
+outcome results in exploding tree size and is thus not scalable. Moreover, the
+study also suggests that compared assuming constant channel quality, a fully
+channel-aware finite horizon scheduler does not lead to improved results as one
+would initially expect. More effort is needed to make the finite horizon
+scheduling scheme feasible in real-life network conditions. While our proposed
+algorithm finds the optimal scheduling policy for a given horizon, it may be
+possible to find a trade-off between optimality and complexity, as long as
+possible GE channel transitions are not neglected. A compromise may be found by
+combining FHS and GES. Namely, we take the tree structure of FHS but explore
+possible GE channel transitions by adapting the GES branch transition
+probabilities on certain levels. This way we still are GE channel-aware without
+increasing complexity.
 
 For simplicity, we assumed scalar sub-systems in our simulation setup. Further
 research can be put into evaluating the efficiency of finite horizon scheduling
@@ -42,4 +45,13 @@ in real-life use-cases. An example would be a vehicular scenario case-study
 where the users are applications from the vehicular domain, e.g. cruise control,
 motor speed etc. 
 
-% TODO: Add OS effect conclusion
+Lastly, the reason behind different simulation results on Linux, Mac and Windows
+is yet to be answered. We have analyzed that deviating scheduler performance in
+terms of MSE and AoI can either arise from inconsistent random number
+generators, scheduling decisions or both. Difference in latter are merely
+affected by minimization input obtained from the scheduler's cost map. Our
+investigation has however shown that the output of random number generators and
+cost maps are identical among all three operating systems. Further investigation
+can focus on possible numerical errors of floating point operations affecting
+the scheduler's behavior.
+
