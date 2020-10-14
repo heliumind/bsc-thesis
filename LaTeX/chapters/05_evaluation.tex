@@ -28,12 +28,8 @@ most challenging application, as its system state evolves the most within a
 control time step $k$. Moreover, sub-systems are sampled periodically every 3
 slots, i.e., $D_i=3$. To enable non-synchronized sampling, we determine the
 initial sampling event randomly from a discrete uniform distribution as $t_{i,o}
-= \mathcal{U}\{0, D_i-1\}$. \\
-The control law is selected with respect to $\boldsymbol{Q}_i = 1$ and
-$\boldsymbol{R}_i = 1$. That is, we solely account for state cost and allow
-arbitrary control inputs. According to Eq.~\eqref{eq:optimalgain}, the optimal
-feedback gain matrix is determined as $\boldsymbol{L}^*_i = A_i$, which
-corresponds to deadbeat control strategy. 
+= \mathcal{U}\{0, D_i-1\}$. The feedback gain matrix is given by
+$\boldsymbol{L}^*_i = A_i$, which corresponds to deadbeat control strategy. 
 
 \begin{table}[htb]
   \begin{center}
@@ -46,6 +42,8 @@ corresponds to deadbeat control strategy.
   Failure rate & $f$ & 0.3 & 0.1 & 0.0024 \\ 
   Recovery rate & $r$ & 0.3 & 0.1 & 0.0832 \\
   \hline
+  Stationary probability Bad & $\pi_G$ & 0.5 & 0.5 & 0.972 \\
+  Stationary probability Good & $\pi_B$ & 0.5 & 0.5 & 0.028 \\
   Average error probability & $p_E$ & 0.5 & 0.5 & 0.0227 \\
   Mean sojourn time in Good & $T_G$ & 3.33 & 10 & 416.66 \\
   Mean sojourn time in Bad & $T_B$ & 3.33 & 10 & 12 \\
@@ -69,11 +67,12 @@ wireless testbed based on the IEEE 802.11n standard. Obtained network trace is
 then used to find analytical GE parameters using the \textit{Baum-Welch
 algorithm} \cite{baum1970maximization}. Compared to the first two settings,
 scenario 3 provides a good channel with significantly lower average loss
-probabilities and stays in the good state for the majority of time. \\ 
-For each scenario we vary the finite Horizon $H=\left\{ 1, \cdots, 10\right\}$
-for FHS and $H=\left\{ 1, \cdots, 4\right\}$ for GES to study its effect on AoI
-and MSE. Each configuration is simulated for a duration of $D=20000$ time slots
-and repeated $R=200$ times.
+probabilities and stays in the good state for the majority of time. For each
+scenario we vary the finite Horizon $H=\left\{ 1, \cdots, 10\right\}$ for FHS
+and $H=\left\{ 1, \cdots, 4\right\}$ for GES to study its effect on AoI and MSE.
+Each configuration is simulated for a duration of $D=20000$ time slots and
+repeated $R=200$ times in order to compensate for the randomness introduced by
+system noise and packet dropout.
 
 \subsection{Performance Metrics} 
 
@@ -185,7 +184,7 @@ AoI indicates a more frequent update rate.
   \end{subfigure}
   \begin{subfigure}{0.49\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{FHS2_AoI_against_H_separate}
+    \includegraphics[width=\textwidth]{FHS3_AoI_against_H_separate}
     \caption{Scenario 3 with FHS}
   \end{subfigure}
   \hfill
@@ -318,7 +317,7 @@ channel quality. However, in the case of GES,
   \end{subfigure}
   \begin{subfigure}[b]{0.49\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{FHS2_MSE_against_H_separate}
+    \includegraphics[width=\textwidth]{FHS3_MSE_against_H_separate}
     \caption{Scenario 3 with FHS}
   \end{subfigure}
   \hfill
@@ -378,18 +377,18 @@ worst-case scenario.
   \end{center}
 \end{table}
 
-Nevertheless, finding the global optimum by considering every possible network
-outcome is not scalable, especially for NCS scenarios with Gilbert-Elliot
-channels. During evaluation we stopped GES simulations at $H=4$ as runtime were
-not feasible for subsequent horizons. To tackle scalability for the proposed
-approach, a trade-off has to be found between complexity by increasing H and
-complexity by decreasing H. In particular, the tree size has to be reduced
-without neglecting possible GE channel transitions. Inspired by how reinforcement
-learning copes with the \textit{exploration-exploitation dilemma}, a compromise
-may be found with the following idea: The complete tree structure is built in a
-FHS manner in order to constrain complexity. However, we are aware of the GE
-channel by augmenting the branches at certain tree levels with transition
-probabilities according to GES. One could uniformly decide at each level if a
-channel transition should be considered, which makes such a scheduler
-``explore'' for potential performance gains instead of exploiting thee
-information it already has about the channel state.
+Nevertheless, finding the optimal scheduling policy by considering every
+possible network outcome is not scalable, especially for NCS scenarios with
+Gilbert-Elliot channels. During evaluation we stopped GES simulations at $H=4$
+as runtime were not feasible for subsequent horizons. To tackle scalability for
+the proposed approach, a trade-off has to be found between complexity by
+increasing H and complexity by decreasing H. In particular, the tree size has to
+be reduced without neglecting possible GE channel transitions. Inspired by how
+reinforcement learning copes with the \textit{exploration-exploitation dilemma},
+a compromise may be found with the following idea: The complete tree structure
+is built in a FHS manner in order to constrain complexity. However, we are aware
+of the GE channel by augmenting the branches at certain tree levels with
+transition probabilities according to GES. One could uniformly decide at each
+level if a channel transition should be considered, which makes such a scheduler
+``explore'' for potential performance gains instead of exploiting the
+information it already has about the current channel state.

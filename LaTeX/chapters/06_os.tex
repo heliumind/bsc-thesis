@@ -21,15 +21,14 @@ investigation.
 
 \begin{table}[b]
   \begin{center}
-  \begin{tabular}{|l|c|c|c|} 
-  % \begin{tabular}{|l|c|c|>{\centering\arraybackslash}p{3.4cm}|} 
+  \begin{tabular}{|l|c|c|>{\centering\arraybackslash}p{3.4cm}|} 
   \hline
   \textbf{Environment} & \textbf{Linux} & \textbf{Mac} & \textbf{Windows} \\
   \hline \hline
   Compiler & g++ 8.4.0 & Apple clang 11.0.0 & g++ 10.2.0 (Mingw-w64) \\ 
   Operating System & Ubuntu 18.04.05 & macOS 10.15.7 & Windows 10 Ver. 1809 \\ 
   % Kernel & GNU/Linux 4.15.0-117-generic x86\_64 & x86\_64-apple-darwin19.6.0 & WIN32 \\ 
-  CPU & 0.3 & Intel Core i5-4260U & Intel Core i5-4670 \\
+  CPU & Intel Xeon E5-2690v2 & Intel Core i5-4260U & Intel Core i5-4670 \\
   % Cores & 32 & 4 & 4 \\
   \hline
   \end{tabular}
@@ -115,7 +114,7 @@ whose properties approximate true random numbers. A prominent example is a
 \textit{Mersenne Twister} generator. Pseudorandomness is caused by the initial
 value, also called \textit{seed}, given to the random number generator. In
 particular, the output numbers are completely determined by the seed. Therefore,
-it is important to initialize random number generators with unique seeds e.g.
+it is important to initialize random number generators with unique seeds, e.g.
 hardware state information. Further, the obtained raw numbers are transformed to
 a suitable distribution for deployment.
 
