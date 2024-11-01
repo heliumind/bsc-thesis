@@ -4,7 +4,7 @@ AoI-based Scheduling for Networked Control Systems over Gilbert-Elliot Channels
 PDF](https://img.shields.io/badge/Download-PDF-green)](https://github.com/heliumind/bsc-thesis/releases/download/final/BA_He.pdf)
 
 ## TUM EI Bachelor's thesis
-Supervised by [Onur Ayan](https://www.ei.tum.de/lkn/team/mitarbeiter/ayan-onur/)
+Supervised by [Onur Ayan](https://github.com/oayan)
 at Chair for Communication Systems (Prof. Wolfgang Kellerer)
 
 ## Directories
